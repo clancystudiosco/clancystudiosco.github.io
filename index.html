@@ -30,8 +30,8 @@
 
   :root{
     --bg: #050505;
-    --bg-alt: #0a0a0a;
-    --bg-raise: #101010;
+    --bg-alt: rgba(10,10,10,0.55);
+    --bg-raise: rgba(16,16,16,0.6);
     --red: #e6413b;
     --yellow: #fde61e;
     --ink: #f3f1e9;
@@ -58,15 +58,78 @@
     *,*::before,*::after{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
   }
 
+  /* ======================================================================
+     FONDO PRINCIPAL — FONDOWEB.png
+     La imagen (rojo / amarillo / negro, textura grunge tipo fuego) es el
+     fondo fijo de toda la página. Para que se sienta viva sin usar un GIF
+     pesado, se anima suavemente su background-position (deriva orgánica) y
+     se le superpone una capa de grano cinematográfico que vibra en bucle.
+     REEMPLAZAR: si el archivo cambia de nombre, actualizar 'FONDOWEB.png'
+     en la regla `body` de abajo — es la única referencia en todo el CSS.
+     ====================================================================== */
   body{
     margin:0;
-    background: var(--bg);
     color: var(--ink);
     font-family: var(--f-body);
     font-size: 16px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    position: relative;
+
+    background-image: url('FONDOWEB.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    animation: bgDrift 26s ease-in-out infinite alternate;
+  }
+
+  /* Deriva orgánica: mueve muy ligeramente el encuadre del fondo, como si respirara */
+  @keyframes bgDrift{
+    0%   { background-position: 48% 46%; }
+    25%  { background-position: 52% 50%; }
+    50%  { background-position: 50% 54%; }
+    75%  { background-position: 46% 50%; }
+    100% { background-position: 50% 48%; }
+  }
+
+  /* Oscurece de forma pareja para que el texto sea legible sobre cualquier zona de la textura,
+     sin tapar el fondo: se queda por debajo de todo el contenido (z-index -1) pero encima del
+     background-image del body (que no tiene z-index propio, así que esto siempre queda visualmente arriba). */
+  body::before{
+    content:"";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(ellipse 75% 55% at 50% 0%, rgba(5,5,5,0.35) 0%, rgba(5,5,5,0.72) 70%),
+                linear-gradient(180deg, rgba(5,5,5,0.42) 0%, rgba(5,5,5,0.6) 45%, rgba(5,5,5,0.78) 100%);
+    pointer-events: none;
+  }
+
+  /* Grano cinematográfico animado — ruido analógico que vibra en bucle, 100% CSS, sin archivos pesados */
+  body::after{
+    content:"";
+    position: fixed;
+    inset: -50px;
+    z-index: 1500;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size: 180px 180px;
+    animation: grainVibrate 0.7s steps(4) infinite;
+  }
+  @keyframes grainVibrate{
+    0%   { transform: translate(0,0); }
+    25%  { transform: translate(-2%, 3%); }
+    50%  { transform: translate(2%, -2%); }
+    75%  { transform: translate(-3%, -3%); }
+    100% { transform: translate(0,0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    body{ animation: none; }
+    body::after{ animation: none; opacity: 0.3; }
   }
 
   img{ max-width:100%; display:block; }
@@ -238,16 +301,15 @@
     min-height: 100svh;
     display:flex; flex-direction:column; justify-content: center;
     padding-top: 6rem; padding-bottom: 4rem;
-    background:
-      radial-gradient(ellipse 90% 60% at 50% 0%, rgba(230,65,59,0.14), transparent 60%),
-      linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
+    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(230,65,59,0.12), transparent 60%),
+                linear-gradient(180deg, rgba(5,5,5,0.15) 0%, rgba(5,5,5,0.55) 75%, rgba(5,5,5,0.75) 100%);
     position: relative;
     overflow:hidden;
   }
   .hero::after{
     content:"";
     position:absolute; left:0; right:0; bottom:0; height:40%;
-    background: linear-gradient(to top, rgba(230,65,59,0.05), transparent);
+    background: linear-gradient(to top, rgba(5,5,5,0.9), transparent);
     pointer-events:none;
   }
   .hero-logo{
@@ -443,7 +505,7 @@
   }
   .work-card .ph{
     position:absolute; inset:0;
-    background: linear-gradient(160deg, #151212 0%, #0a0a0a 70%);
+    background: linear-gradient(160deg, rgba(21,18,18,0.7) 0%, rgba(10,10,10,0.75) 70%);
     display:flex; align-items:center; justify-content:center;
     color: var(--muted-dim); font-family:var(--f-label); font-size:0.78rem; letter-spacing:0.08em;
   }
@@ -456,7 +518,7 @@
 
   /* ============ PILOT SESSIONS ============ */
   .pilot-section{
-    background: linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
+    background: linear-gradient(180deg, rgba(10,10,10,0.45) 0%, rgba(5,5,5,0.68) 100%);
     position: relative;
   }
   .pilot-badge{
@@ -537,13 +599,13 @@
   .field input:focus, .field select:focus, .field textarea:focus{ outline:none; border-color: var(--yellow); }
   .field textarea{ resize: vertical; min-height: 90px; }
   .field select{ appearance:none; -webkit-appearance:none; }
-  .field select option{ background: var(--bg-alt); color: var(--ink); }
+  .field select option{ background: #0a0a0a; color: var(--ink); }
   .form-note{ margin-top: 1.6rem; font-size: 0.85rem; color: var(--muted-dim); max-width: 60ch; }
   .form-actions{ margin-top: 2.2rem; }
 
   /* ============ CONTACTO ============ */
   .contact-section{
-    background: linear-gradient(180deg, #050505, #0d0d0d);
+    background: linear-gradient(180deg, rgba(5,5,5,0.35), rgba(13,13,13,0.65));
     text-align:center;
   }
   .contact-links{
@@ -562,7 +624,7 @@
   footer{
     padding: 3.5rem 0 2.5rem;
     border-top: 1px solid var(--line);
-    background: #030303;
+    background: rgba(3,3,3,0.7);
   }
   .footer-top{ display:flex; flex-wrap:wrap; justify-content:space-between; gap: 2rem; align-items:flex-start; }
   .footer-brand{ display:flex; align-items:center; gap:0.8rem; }
