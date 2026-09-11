@@ -35,8 +35,8 @@
     --red: #e6413b;
     --yellow: #fde61e;
     --ink: #f3f1e9;
-    --muted: #93897d;
-    --muted-dim: #5c564d;
+    --muted: #d9d3c6;
+    --muted-dim: #a89f90;
     --line: rgba(243,241,233,0.12);
     --line-strong: rgba(243,241,233,0.22);
 
@@ -135,6 +135,31 @@
   img{ max-width:100%; display:block; }
   a{ color: inherit; }
 
+  /* ============================================================
+     LEGIBILIDAD DEL TEXTO DE CUERPO
+     Los títulos (h1/h2/h3, .accent, .quote-block, .pilot-title, etc.)
+     NO se tocan. Esto solo mejora el contraste de los textos en
+     tono claro/blanco (párrafos, links, listas, etiquetas) frente
+     al fondo con textura — sin modificar la opacidad del fondo.
+     ============================================================ */
+  p:not(.quote-block),
+  .kicker,
+  .tag,
+  .video-placeholder,
+  .contact-links a,
+  .footer-col a,
+  .footer-brand .tag,
+  nav.nav-links a,
+  .offer-includes li,
+  .pay-item .label,
+  .price-label,
+  .slot .desc,
+  .form-note,
+  .work-card .info span,
+  .hero-scroll span{
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+  }
+
   .wrap{
     max-width: var(--container);
     margin: 0 auto;
@@ -180,6 +205,29 @@
     color: var(--ink);
   }
   .h-section .accent{ color: var(--yellow); }
+
+  /* Imagen "Clancyletra.png" que reemplaza la palabra "Clancy" dentro del
+     título de la sección "Bienvenido a Clancy". Se ajusta con unidades em
+     para escalar junto con el tamaño del título (clamp de .h-section). */
+  .clancy-letra-img{
+    display: inline-block;
+    height: 0.82em;
+    width: auto;
+    vertical-align: -0.06em;
+    margin: 0 0.06em;
+  }
+
+  .offer-title-img{
+    display: block;
+    width: clamp(220px, 28vw, 360px);
+    height: auto;
+  }
+
+  .bienvenida-title-img{
+    display: block;
+    width: min(520px, 82vw);
+    height: auto;
+  }
 
   p.lede{
     font-size: clamp(1.05rem, 1.6vw, 1.25rem);
@@ -317,6 +365,14 @@
     margin-bottom: 2.2rem;
     opacity: 0;
     animation: rise .9s var(--ease) forwards;
+  }
+  .hero-title-img{
+    width: min(560px, 88vw);
+    height: auto;
+    margin-bottom: 0;
+    opacity: 0;
+    animation: rise .9s var(--ease) forwards;
+    animation-delay: .12s;
   }
   .hero h1{
     font-size: clamp(3.2rem, 12vw, 8.4rem);
@@ -528,6 +584,11 @@
     margin-bottom: 1.6rem;
   }
   .pilot-title{ font-size: clamp(2.6rem, 8vw, 5.4rem); }
+  .pilot-title-img{
+    display: block;
+    width: min(640px, 92vw);
+    height: auto;
+  }
   .pilot-sub{ font-family: var(--f-label); font-weight:600; color: var(--red); font-size: clamp(1.1rem, 2vw, 1.4rem); margin-top:0.6rem; }
 
   .offer-card{
@@ -535,6 +596,7 @@
     border: 1.5px solid var(--line-strong);
     padding: clamp(1.8rem, 4vw, 3.2rem);
     position: relative;
+    background: rgba(6,6,6,0.82);
   }
   .offer-card::before{
     content:""; position:absolute; top:-1.5px; left:-1.5px; width:34px; height:34px;
@@ -672,7 +734,7 @@
       <a href="#contacto">Contacto</a>
     </nav>
     <!-- REEMPLAZAR AQUÍ CON EL ENLACE REAL DE WHATSAPP -->
-    <a href="https://wa.me/57XXXXXXXXXX?text=Hola%20Clancy%2C%20quiero%20agendar%20una%20sesi%C3%B3n" class="btn btn-solid nav-cta" target="_blank" rel="noopener">Agendar sesión</a>
+    <a href="https://wa.me/573197248697?text=Hola%20Clancy%2C%20quiero%20agendar%20una%20sesi%C3%B3n" class="btn btn-solid nav-cta" target="_blank" rel="noopener">Agendar sesión</a>
     <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
@@ -687,20 +749,18 @@
   <a href="#pilot">Pilot Sessions</a>
   <a href="#contacto">Contacto</a>
   <!-- REEMPLAZAR AQUÍ CON EL ENLACE REAL DE WHATSAPP -->
-  <a href="https://wa.me/57XXXXXXXXXX" class="btn btn-solid" target="_blank" rel="noopener">Agendar sesión</a>
+  <a href="https://wa.me/573197248697" class="btn btn-solid" target="_blank" rel="noopener">Agendar sesión</a>
 </div>
 
 <!-- ============ 1. HERO ============ -->
 <section class="hero" id="hero">
   <div class="wrap">
-    <!-- REEMPLAZAR: logo oficial ya cargado como logo-clancy.png -->
-    <img src="logo-clancy.png" alt="Clancy Studios — Más que un estudio" class="hero-logo">
-    <h1>CLANCY<br>STUDIOS</h1>
-    <p class="tagline">Más que un estudio.</p>
+    <!-- REEMPLAZAR: Titulo-clancy.png — imagen del título sin fondo (reemplaza al logo + texto CLANCY STUDIOS / Más que un estudio.) -->
+    <img src="Titulo-clancy.png" alt="Clancy Studios — Más que un estudio" class="hero-title-img">
     <p class="desc">Estudio de grabación, producción, mezcla y mastering en Usaquén, Bogotá.</p>
     <div class="hero-actions">
       <!-- REEMPLAZAR AQUÍ CON EL ENLACE REAL DE WHATSAPP -->
-      <a href="https://wa.me/57XXXXXXXXXX?text=Hola%20Clancy%2C%20quiero%20agendar%20una%20sesi%C3%B3n" class="btn btn-solid" target="_blank" rel="noopener">Agendar sesión</a>
+      <a href="https://wa.me/573197248697?text=Hola%20Clancy%2C%20quiero%20agendar%20una%20sesi%C3%B3n" class="btn btn-solid" target="_blank" rel="noopener">Agendar sesión</a>
       <a href="#pilot" class="btn btn-ghost">Pilot Sessions</a>
     </div>
   </div>
@@ -715,7 +775,7 @@
   <div class="wrap split">
     <div class="reveal">
       <span class="kicker">Quiénes somos</span>
-      <h2 class="h-section" style="margin-top:1rem;">Bienvenido a <span class="accent">Clancy</span>.</h2>
+      <img src="Bienvenida.png" alt="Bienvenido a Clancy" class="bienvenida-title-img" style="margin-top:1rem;">
       <p class="lede" style="margin-top:1.6rem;">Clancy nace de la idea de que hacer música debería sentirse como entrar a un lugar donde realmente puedes concentrarte en crear.</p>
       <p class="quote-block reveal">No es solo un espacio con micrófonos. Es un lugar pensado para que una idea se convierta en canción, con alguien acompañándote en cada paso.</p>
     </div>
@@ -783,7 +843,7 @@
       </div>
       <div class="exp-item reveal">
         <h3>Sesiones enfocadas</h3>
-        <p>El tiempo en el estudio se usa para avanzar, no para improvisar sobre la marcha.</p>
+        <p>El tiempo en el estudio se organiza para que la creatividad fluya con dirección, sin perder tiempo en logística de última hora.</p>
       </div>
       <div class="exp-item reveal">
         <h3>Acompañamiento en el proceso</h3>
@@ -791,17 +851,8 @@
       </div>
       <div class="exp-item reveal">
         <h3>Un espacio cómodo</h3>
-        <p>Pensado para que puedas concentrarte, no para impresionar con metros cuadrados.</p>
+        <p>Trabajamos con grupos reducidos — un máximo aproximado de 5 personas activas en el proyecto, más el equipo de Clancy — para mantener un ambiente enfocado y creativo. Priorizamos que quien esté en la sala tenga una función real dentro de la sesión.</p>
       </div>
-    </div>
-
-    <div class="banner-statement reveal">
-      <p class="h-section" style="font-family: var(--f-display);">Pocas personas.<br><span class="accent">Mucha atención.</span></p>
-    </div>
-
-    <div class="capacity-note reveal">
-      <span class="num">5</span>
-      <p>Trabajamos con grupos reducidos — un máximo aproximado de 5 personas activas en el proyecto, más el equipo de Clancy — para mantener un ambiente enfocado y creativo. Priorizamos que quien esté en la sala tenga una función real dentro de la sesión.</p>
     </div>
   </div>
 </section>
@@ -818,8 +869,6 @@
       <div class="service-row reveal"><h3>Edición</h3><p>Afinación, timing y limpieza técnica sin quitarle naturalidad a la interpretación.</p></div>
       <div class="service-row reveal"><h3>Mezcla</h3><p>Balance, espacio y carácter para que la canción suene como debe sonar.</p></div>
       <div class="service-row reveal"><h3>Mastering</h3><p>El último paso antes de que la canción salga al mundo, lista para cualquier plataforma.</p></div>
-      <div class="service-row reveal"><h3>Grabación de instrumentos</h3><p>Batería, piano, guitarras, bajo y sintetizadores según lo que pida el proyecto.</p></div>
-      <div class="service-row reveal"><h3>Producción vocal</h3><p>Dirección y acompañamiento durante la toma para sacar la mejor interpretación posible.</p></div>
     </div>
   </div>
 </section>
@@ -876,6 +925,12 @@
         </div>
       </div>
     </div>
+
+    <!-- REEMPLAZAR: si el nombre del PDF cambia, actualizar el href y el atributo download aquí abajo -->
+    <a href="Lista-técnica-de-equipos-ClancyStudios.pdf" download="Lista-técnica-de-equipos-ClancyStudios.pdf" class="btn btn-solid" style="margin-top:3.5rem;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>
+      Lista técnica de equipos
+    </a>
   </div>
 </section>
 
@@ -910,7 +965,7 @@
 <section class="section pilot-section" id="pilot">
   <div class="wrap">
     <span class="pilot-badge">Lanzamiento</span>
-    <h2 class="h-section pilot-title">CLANCY PILOT<br>SESSIONS</h2>
+    <img src="clancypiloto.png" alt="Clancy Pilot Sessions" class="pilot-title-img">
     <p class="pilot-sub">Los primeros 8 proyectos de Clancy.</p>
     <p class="lede" style="margin-top:1.6rem; max-width:56ch;">Estamos abriendo un número limitado de sesiones para encontrar los primeros proyectos de esta etapa. No buscamos al "mejor" artista — buscamos proyectos que encajen con el espacio, el formato de trabajo y la disponibilidad que tenemos ahora mismo.</p>
 
@@ -919,7 +974,7 @@
       <div class="offer-head">
         <div>
           <span class="kicker">La oferta</span>
-          <h3 style="margin-top:0.8rem;">Clancy Pilot Session — 8 horas de estudio</h3>
+          <h3 style="margin-top:0.8rem;"><img src="pilotsessions.png" alt="Clancy Pilot Session" class="offer-title-img"></h3>
         </div>
         <div class="price-block">
           <div class="price-old">Valor comercial: $550.000 COP</div>
@@ -929,51 +984,62 @@
       </div>
 
       <ul class="offer-includes">
-        <li>Grabación</li><li>Edición</li><li>Mezcla</li><li>Mastering</li>
+        <li>Grabación 8 horas de estudio</li><li>Edición</li><li>Mezcla</li><li>Mastering</li>
         <li>Piano</li><li>Sintetizadores</li><li>Batería</li><li>Entrega del archivo final</li>
         <li>2 revisiones de mezcla</li><li>2 revisiones de mastering</li>
       </ul>
 
       <div class="payment-breakdown">
-        <div class="pay-item"><div class="amount">$20.000</div><div class="label">Reserva</div></div>
-        <div class="pay-item"><div class="amount">$240.000</div><div class="label">Saldo el día de la sesión</div></div>
+        <div class="pay-item"><div class="amount">$25.000</div><div class="label">Reserva</div></div>
+        <div class="pay-item"><div class="amount">$235.000</div><div class="label" style="color:var(--yellow);">Saldo el día de la sesión</div></div>
         <div class="pay-item"><div class="amount">$260.000</div><div class="label">Total</div></div>
       </div>
-      <p class="form-note">La reserva se descuenta del valor total: no es un cobro adicional, sino la forma de confirmar tu fecha. Queda sujeta a las condiciones de cancelación/reprogramación del piloto. La entrega final se realiza una vez completado el pago correspondiente.</p>
+      <p class="form-note">La reserva se descuenta del valor total: no es un cobro adicional, sino la forma de confirmar tu fecha. Ten en cuenta que <strong>los $25.000 de la reserva no son reembolsables</strong>. Si necesitas reprogramar, puedes hacerlo con al menos <strong>48 horas de anticipación</strong> al inicio de tu sesión; pasado ese plazo, la reserva se pierde. La entrega final se realiza una vez completado el pago correspondiente.</p>
+
+      <!-- REEMPLAZAR: si el nombre del PDF cambia, actualizar el href y el atributo download aquí abajo -->
+      <a href="Términos-y-condiciones-Pilot-Sessions-Clancy-Studios.pdf" download="Términos-y-condiciones-Pilot-Sessions-Clancy-Studios.pdf" class="btn btn-solid" style="margin-top:1.8rem;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>
+        Términos y condiciones Pilot Sessions
+      </a>
     </div>
 
     <!-- HORARIO -->
-    <span class="kicker" style="margin-top:4rem; display:inline-flex;">Cómo se usan las 8 horas</span>
-    <div class="schedule">
-      <div class="slot">
-        <div class="time">08:00 — 12:00</div>
-        <div class="title">Primera sesión</div>
-        <div class="desc">4 horas de estudio</div>
+    <div class="offer-card reveal">
+      <span class="kicker" style="display:inline-flex;">Cómo se usan las 8 horas</span>
+      <div class="schedule">
+        <div class="slot">
+          <div class="time">08:00 — 12:00</div>
+          <div class="title">Primera sesión</div>
+          <div class="desc">4 horas de estudio</div>
+        </div>
+        <div class="slot rest">
+          <div class="time">12:00 — 13:00</div>
+          <div class="title">Almuerzo</div>
+          <div class="desc">No cuenta dentro de las 8 horas</div>
+        </div>
+        <div class="slot">
+          <div class="time">13:00 — 17:00</div>
+          <div class="title">Segunda sesión</div>
+          <div class="desc">4 horas de estudio</div>
+        </div>
       </div>
-      <div class="slot rest">
-        <div class="time">12:00 — 13:00</div>
-        <div class="title">Almuerzo</div>
-        <div class="desc">No cuenta dentro de las 8 horas</div>
-      </div>
-      <div class="slot">
-        <div class="time">13:00 — 17:00</div>
-        <div class="title">Segunda sesión</div>
-        <div class="desc">4 horas de estudio</div>
-      </div>
+      <p class="form-note" style="margin-top:2rem;">También es posible grabar la canción completa dividiendo el trabajo en 2 sesiones de 4 horas, en lugar de las 8 horas seguidas.</p>
     </div>
 
     <!-- PROCESO DE SELECCIÓN -->
-    <span class="kicker" style="margin-top:5rem; display:inline-flex;">Cómo funciona</span>
-    <div class="process-list">
-      <div class="process-item reveal"><span class="idx">01</span><div><h4>Aplicas</h4><p>Nos cuentas sobre tu proyecto: quién eres, qué canción quieres trabajar y qué buscas lograr.</p></div></div>
-      <div class="process-item reveal"><span class="idx">02</span><div><h4>Revisamos</h4><p>Evaluamos el proyecto y su compatibilidad con el formato, la disponibilidad y el espacio.</p></div></div>
-      <div class="process-item reveal"><span class="idx">03</span><div><h4>Te contactamos</h4><p>Si tu proyecto encaja con esta primera etapa, nos ponemos en contacto contigo.</p></div></div>
-      <div class="process-item reveal"><span class="idx">04</span><div><h4>Reservas</h4><p>Confirmas tu sesión con la reserva de $20.000 COP.</p></div></div>
-      <div class="process-item reveal"><span class="idx">05</span><div><h4>Creamos</h4><p>8 horas enfocadas en convertir la idea en una canción terminada.</p></div></div>
+    <div class="offer-card reveal">
+      <span class="kicker" style="display:inline-flex;">Cómo funciona</span>
+      <div class="process-list">
+        <div class="process-item reveal"><span class="idx">01</span><div><h4>Aplicas</h4><p>Nos cuentas sobre tu proyecto: quién eres, qué canción quieres trabajar y qué buscas lograr.</p></div></div>
+        <div class="process-item reveal"><span class="idx">02</span><div><h4>Revisamos</h4><p>Evaluamos el proyecto y su compatibilidad con el formato, la disponibilidad y el espacio.</p></div></div>
+        <div class="process-item reveal"><span class="idx">03</span><div><h4>Te contactamos</h4><p>Si tu proyecto encaja con esta primera etapa, nos ponemos en contacto contigo.</p></div></div>
+        <div class="process-item reveal"><span class="idx">04</span><div><h4>Reservas</h4><p>Confirmas tu sesión con la reserva de $25.000 COP.</p></div></div>
+        <div class="process-item reveal"><span class="idx">05</span><div><h4>Creamos</h4><p>8 horas enfocadas en convertir la idea en una canción terminada.</p></div></div>
+      </div>
     </div>
 
     <!-- FORMULARIO DE APLICACIÓN -->
-    <div id="aplicar" style="margin-top:5.5rem;">
+    <div id="aplicar" class="offer-card reveal">
       <span class="kicker">Aplicar</span>
       <h2 class="h-section" style="margin-top:1rem; font-size: clamp(2rem, 5vw, 3.2rem);">Quiero ser parte de las Pilot Sessions.</h2>
       <p class="lede" style="margin-top:1.2rem;">Cuéntanos sobre tu proyecto. Esto no es un concurso — es una solicitud para participar en una experiencia de lanzamiento limitada.</p>
@@ -984,17 +1050,17 @@
         atributo action y method, o simplemente enlaza un botón al formulario externo.
       -->
       <form class="form-grid" id="pilotForm" action="#" method="post">
-        <div class="field"><label for="artista">Nombre del artista / proyecto</label><input id="artista" name="artista" type="text" required></div>
+        <div class="field"><label for="artista">Nombre del artista / grupo / proyecto</label><input id="artista" name="artista" type="text" required></div>
         <div class="field"><label for="responsable">Nombre del responsable</label><input id="responsable" name="responsable" type="text" required></div>
         <div class="field"><label for="whatsapp">WhatsApp</label><input id="whatsapp" name="whatsapp" type="tel" required></div>
         <div class="field"><label for="instagram">Instagram</label><input id="instagram" name="instagram" type="text"></div>
         <div class="field"><label for="correo">Correo</label><input id="correo" name="correo" type="email" required></div>
         <div class="field"><label for="genero">Género musical</label><input id="genero" name="genero" type="text"></div>
         <div class="field full"><label for="cancion">Nombre de la canción / proyecto</label><input id="cancion" name="cancion" type="text"></div>
-        <div class="field full"><label for="demo">Demo o enlace de referencia</label><input id="demo" name="demo" type="url" placeholder="https://"></div>
+        <div class="field full"><label for="demo">Demo o enlace de referencia <span style="color:var(--red);">*Por favor enlace de YouTube</span></label><input id="demo" name="demo" type="url" placeholder="https://"></div>
         <div class="field full"><label for="referencias">Referencias musicales</label><input id="referencias" name="referencias" type="text"></div>
         <div class="field full"><label for="objetivo">¿Qué quieres conseguir con esta sesión?</label><textarea id="objetivo" name="objetivo"></textarea></div>
-        <div class="field"><label for="participantes">Número de participantes activos</label><input id="participantes" name="participantes" type="number" min="1" max="5"></div>
+        <div class="field"><label for="participantes">Número de participantes activos</label><input id="participantes" name="participantes" type="number" min="1" max="99"></div>
         <div class="field"><label for="disponibilidad">Disponibilidad</label><input id="disponibilidad" name="disponibilidad" type="text" placeholder="Días / horarios posibles"></div>
         <div class="field full"><label for="funciones">¿Quiénes participarán y qué función tendrán?</label><textarea id="funciones" name="funciones"></textarea></div>
         <div class="field"><label for="snack">Snack favorito</label><input id="snack" name="snack" type="text"></div>
