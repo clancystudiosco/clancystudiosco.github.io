@@ -545,10 +545,10 @@
   .gear-cat{ padding: 2rem 0; border-top:1px solid var(--line); }
   @media (min-width: 720px){ .gear-cat{ padding: 2rem 2.5rem 2rem 0; } .gear-cat:nth-child(even){ padding-left:2.5rem; padding-right:0; border-left: 1px solid var(--line); } }
   .gear-cat h3{ font-family: var(--f-label); font-weight:600; letter-spacing:0.04em; color: var(--yellow); font-size:0.95rem; margin-bottom:1rem; }
-  .gear-list{ list-style:none; margin:0; padding:0; display:grid; gap:0.8rem; }
-  .gear-list li{ display:flex; flex-direction:column; gap:0.1rem; }
-  .gear-list b{ font-weight:600; font-size:0.95rem; color: var(--ink); }
-  .gear-list span{ font-size:0.84rem; color: var(--muted); text-shadow: 0 1px 6px rgba(0,0,0,0.6); }
+  .gear-list{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:0.6rem; }
+  .gear-list li{ display:flex; flex-direction:column; gap:0.15rem; border:1px solid var(--line-strong); padding:0.55rem 0.9rem; max-width:min(100%, 300px); }
+  .gear-list b{ font-weight:600; font-size:0.9rem; color: var(--ink); }
+  .gear-list span{ font-size:0.78rem; line-height:1.4; color: var(--muted); text-shadow: 0 1px 6px rgba(0,0,0,0.6); }
   .tag-row{ display:flex; flex-wrap:wrap; gap:0.6rem; }
   .tag{
     font-family: var(--f-body); font-size: 0.86rem; color: var(--ink);
