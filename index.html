@@ -412,7 +412,8 @@
   .hero-scroll{
     position:absolute; bottom: 2rem; left: var(--gutter);
     display:flex; align-items:center; gap:0.8rem;
-    font-family: var(--f-label); font-size:0.75rem; letter-spacing:0.12em; color: var(--muted-dim);
+    font-family: var(--f-label); font-size:0.75rem; letter-spacing:0.12em; color: var(--muted);
+    z-index: 3; /* por encima del degradado oscuro .hero::after que lo tapaba */
   }
   .hero-scroll .line{ width:1px; height:34px; background: var(--muted-dim); position:relative; overflow:hidden; }
   .hero-scroll .line::after{
@@ -478,7 +479,7 @@
     background: var(--bg-raise);
     padding: 1.1rem;
   }
-  .embed-frame iframe{ width:100%; border:0; display:block; }
+  .embed-frame iframe{ width:100%; border:0; display:block; border-radius:12px; }
 
   /* ============ 3D TOUR ============ */
   .tour-frame{
@@ -544,6 +545,10 @@
   .gear-cat{ padding: 2rem 0; border-top:1px solid var(--line); }
   @media (min-width: 720px){ .gear-cat{ padding: 2rem 2.5rem 2rem 0; } .gear-cat:nth-child(even){ padding-left:2.5rem; padding-right:0; border-left: 1px solid var(--line); } }
   .gear-cat h3{ font-family: var(--f-label); font-weight:600; letter-spacing:0.04em; color: var(--yellow); font-size:0.95rem; margin-bottom:1rem; }
+  .gear-list{ list-style:none; margin:0; padding:0; display:grid; gap:0.8rem; }
+  .gear-list li{ display:flex; flex-direction:column; gap:0.1rem; }
+  .gear-list b{ font-weight:600; font-size:0.95rem; color: var(--ink); }
+  .gear-list span{ font-size:0.84rem; color: var(--muted); text-shadow: 0 1px 6px rgba(0,0,0,0.6); }
   .tag-row{ display:flex; flex-wrap:wrap; gap:0.6rem; }
   .tag{
     font-family: var(--f-body); font-size: 0.86rem; color: var(--ink);
@@ -709,9 +714,25 @@
   }
   .float-cta svg{ width:24px; height:24px; fill:#0a0a0a; }
 
+  .tally-frame iframe{ width:100%; border:0; display:block; min-height:420px; }
+  .btn[aria-disabled="true"]{ opacity:.45; pointer-events:none; }
+
   .visually-hidden{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
 
   :focus-visible{ outline: 2px solid var(--yellow); outline-offset: 2px; }
+
+  /* ============ CUPOS PILOT ============ */
+  [hidden]{ display:none !important; }
+  .cupos{ margin-top:2rem; display:flex; flex-wrap:wrap; align-items:center; gap:1rem 1.6rem; }
+  .cupos-text{ display:flex; align-items:baseline; gap:0.7rem; font-family: var(--f-label); font-weight:600; color: var(--muted); }
+  .cupos-num{ font-family: var(--f-display); font-size: clamp(2.4rem, 6vw, 3.6rem); line-height:1; color: var(--yellow); }
+  .cupos-pips{ display:flex; gap:6px; }
+  .cupos-pips i{ width:18px; height:8px; background: var(--red); display:block; }
+  .cupos-pips i.taken{ background: transparent; border:1px solid var(--line-strong); }
+  .form-msg{ margin-top:1rem; font-family: var(--f-label); font-weight:600; color: var(--yellow); }
+  .pilot-cta{ margin-top:1.8rem; }
+  .cupos-closed{ margin-top:1.8rem; font-family: var(--f-label); font-weight:600; color: var(--yellow); }
+  .prize-title{ font-family: var(--f-display); font-size: clamp(1.8rem, 4vw, 2.8rem); }
 </style>
 </head>
 <body>
@@ -799,13 +820,9 @@
   <div class="wrap">
     <span class="kicker">Nuestro sonido</span>
     <h2 class="h-section" style="margin-top:1rem;">Canciones, ideas y proyectos<br>que han pasado por Clancy.</h2>
-    <div class="embed-frame" style="margin-top:3rem;">
-      <!-- REEMPLAZAR AQUÍ EL SRC DEL IFRAME DE SOUNDCLOUD -->
-      <iframe
-        title="Reproductor de SoundCloud — Clancy Studios"
-        width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
-        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/clancystudios&color=%23e6413b&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false">
-      </iframe>
+    <!-- SPOTIFY: pega el enlace o el ID de tu playlist en data-playlist-id (ver script al final) -->
+    <div class="embed-frame" id="spotifyFrame" data-playlist-id="" style="margin-top:3rem;">
+      <div class="video-placeholder" style="padding:4rem 2rem;">Playlist de Spotify — próximamente</div>
     </div>
   </div>
 </section>
@@ -852,6 +869,7 @@
       <div class="exp-item reveal">
         <h3>Un espacio cómodo</h3>
         <p>Trabajamos con grupos reducidos — un máximo aproximado de 5 personas activas en el proyecto, más el equipo de Clancy — para mantener un ambiente enfocado y creativo. Priorizamos que quien esté en la sala tenga una función real dentro de la sesión.</p>
+        <p style="color:var(--red); font-family:var(--f-label); font-weight:600; font-size:0.9rem; margin-top:0.8rem;">*Máximo 5 personas activas en el proyecto: el espacio es reducido por ahora.</p>
       </div>
     </div>
   </div>
@@ -882,47 +900,67 @@
 
     <div class="gear-grid">
       <div class="gear-cat reveal">
-        <h3>Micrófonos</h3>
-        <div class="tag-row">
-          <span class="tag">AKG P120</span>
-          <span class="tag">Shure SM57</span>
-          <span class="tag">Shure PGA</span>
-          <span class="tag">Behringer c-2</span>
-        </div>
+        <h3>Interfaces y conversión</h3>
+        <ul class="gear-list">
+          <li><b>SSL 18</b><span>Interfaz principal 26 in / 28 out; preamps, monitoreo y ADAT</span></li>
+          <li><b>Behringer Ultragain Digital ADA8200</b><span>Expansión de 8 canales mic/línea vía ADAT</span></li>
+        </ul>
       </div>
       <div class="gear-cat reveal">
         <h3>Monitoreo</h3>
-        <div class="tag-row"><span class="tag">Focal Alpha 50 Evo</span></div>
+        <ul class="gear-list">
+          <li><b>Focal Alpha 50 Evo</b><span>Monitores activos de referencia, woofer de 5"</span></li>
+          <li><b>Mackie HM-4</b><span>Distribución de audífonos, 4 salidas con volumen individual</span></li>
+          <li><b>Ammoon HP</b><span>Distribución de audífonos adicional</span></li>
+        </ul>
       </div>
       <div class="gear-cat reveal">
-        <h3>Interfaces / conversión</h3>
-        <div class="tag-row"><span class="tag">SSL 18</span></div>
+        <h3>Procesamiento físico</h3>
+        <ul class="gear-list">
+          <li><b>Behringer Ultra-DI Pro DI800</b><span>Cajas directas activas, 8 canales en 1U</span></li>
+          <li><b>Behringer Sonic Exciter SX3040</b><span>Excitador armónico y procesador de graves</span></li>
+          <li><b>Behringer Multicom Pro-XL MDX4600</b><span>Compresor / expansor / limitador, 4 canales</span></li>
+        </ul>
       </div>
       <div class="gear-cat reveal">
-        <h3>Hardware</h3>
-        <div class="tag-row">
-          <span class="tag">Compresión</span>
-          <span class="tag">Excitación armónica</span>
-          <span class="tag">Patchbays</span>
-          <span class="tag">DI</span>
-        </div>
+        <h3>Patch</h3>
+        <ul class="gear-list">
+          <li><b>Behringer Ultrapatch Pro PX3000 (×2)</b><span>Patchbay balanceado, 96 puntos en total</span></li>
+        </ul>
+      </div>
+      <div class="gear-cat reveal">
+        <h3>Micrófonos</h3>
+        <ul class="gear-list">
+          <li><b>AKG P120</b><span>Condensador cardioide de propósito general</span></li>
+          <li><b>Lewitt LCT 040</b><span>Condensador de diafragma pequeño para instrumentos</span></li>
+          <li><b>MXL 990</b><span>Condensador cardioide de diafragma grande</span></li>
+          <li><b>MXL 991</b><span>Condensador de diafragma pequeño, cardioide ancho</span></li>
+          <li><b>Behringer C-2 (par)</b><span>Condensadores de diafragma pequeño, par acoplado</span></li>
+          <li><b>Shure Beta 52A</b><span>Dinámico supercardioide para bombo y bajos</span></li>
+          <li><b>Shure PGA58</b><span>Dinámico cardioide vocal</span></li>
+          <li><b>Shure SM57</b><span>Dinámico estándar de la industria</span></li>
+        </ul>
       </div>
       <div class="gear-cat reveal">
         <h3>Instrumentos</h3>
-        <div class="tag-row">
-          <span class="tag">Piano / teclado</span>
-          <span class="tag">Sintetizadores</span>
-          <span class="tag">Batería</span>
-          <span class="tag">Guitarras / bajo</span>
-        </div>
+        <ul class="gear-list">
+          <li><b>Korg Monologue</b><span>Sintetizador analógico monofónico de 25 teclas</span></li>
+          <li><b>Arturia MicroFreak</b><span>Sintetizador híbrido con teclado capacitivo</span></li>
+          <li><b>Batería acústica</b><span>Con platillos Meinl HCS</span></li>
+        </ul>
       </div>
       <div class="gear-cat reveal">
-        <h3>Software</h3>
-        <div class="tag-row">
-          <span class="tag">DAW principal</span>
-          <span class="tag">Plugins de mezcla</span>
-          <span class="tag">Herramientas de mastering</span>
-        </div>
+        <h3>MIDI</h3>
+        <ul class="gear-list">
+          <li><b>Akai MPK Mini MK3</b><span>Controlador MIDI de 25 teclas con pads y perillas</span></li>
+          <li><b>Alesis Recital Play</b><span>Piano digital de 88 teclas con pedal de sustain</span></li>
+        </ul>
+      </div>
+      <div class="gear-cat reveal">
+        <h3>Sistema de conexión eléctrica</h3>
+        <ul class="gear-list">
+          <li><b>Voltimax Pro</b><span>Regleta de 8 interruptores, fusible 15 A, 1800 W</span></li>
+        </ul>
       </div>
     </div>
 
@@ -938,22 +976,22 @@
 <section class="section" id="trabajos">
   <div class="wrap">
     <span class="kicker">Portafolio</span>
-    <h2 class="h-section" style="margin-top:1rem;">Trabajos.</h2>
-    <p class="lede" style="margin-top:1.2rem;">Esta sección crecerá con cada proyecto que pase por Clancy. Por ahora, un adelanto de lo que viene.</p>
+    <h2 class="h-section" style="margin-top:1rem;">Artistas y productores.</h2>
+    <p class="lede" style="margin-top:1.2rem;">Estos son algunos de los artistas y productores con quienes hemos trabajado: ideas que llegaron al estudio y salieron convertidas en canciones.</p>
 
     <div class="work-grid">
-      <!-- REEMPLAZAR: cada work-card con foto/artista/proyecto real -->
+      <!-- REEMPLAZAR: cada work-card con foto y nombre real del artista o productor -->
       <div class="work-card reveal">
-        <div class="ph">Foto del proyecto</div>
-        <div class="info"><h4>Proyecto próximamente</h4><span>Artista — Género</span></div>
+        <div class="ph">Foto del artista</div>
+        <div class="info"><h4>Nombre del artista</h4><span>Artista — Género</span></div>
       </div>
       <div class="work-card reveal">
-        <div class="ph">Foto del proyecto</div>
-        <div class="info"><h4>Proyecto próximamente</h4><span>Artista — Género</span></div>
+        <div class="ph">Foto del artista</div>
+        <div class="info"><h4>Nombre del artista</h4><span>Artista — Género</span></div>
       </div>
       <div class="work-card reveal">
-        <div class="ph">Foto del proyecto</div>
-        <div class="info"><h4>Proyecto próximamente</h4><span>Artista — Género</span></div>
+        <div class="ph">Foto del productor</div>
+        <div class="info"><h4>Nombre del productor</h4><span>Productor — Género</span></div>
       </div>
     </div>
   </div>
@@ -962,12 +1000,20 @@
 <!-- ============ 9. CLANCY PILOT SESSIONS ============ -->
 <!-- Esta sección está pensada para ser temporal. Ver comentario al final del bloque
      sobre cómo transformarla en "Clancy Sessions" / "Reserva una sesión" después del piloto. -->
-<section class="section pilot-section" id="pilot">
+<section class="section pilot-section" id="pilot" data-cupos-total="10" data-cupos-taken="0">
   <div class="wrap">
-    <span class="pilot-badge">Lanzamiento</span>
+    <span class="pilot-badge">Noviembre · 10 cupos</span>
     <img src="clancypiloto.png" alt="Clancy Pilot Sessions" class="pilot-title-img">
-    <p class="pilot-sub">Los primeros 8 proyectos de Clancy.</p>
-    <p class="lede" style="margin-top:1.6rem; max-width:56ch;">Estamos abriendo un número limitado de sesiones para encontrar los primeros proyectos de esta etapa. No buscamos al "mejor" artista — buscamos proyectos que encajen con el espacio, el formato de trabajo y la disponibilidad que tenemos ahora mismo.</p>
+    <p class="pilot-sub">Los primeros 10 proyectos de Clancy.</p>
+    <p class="lede" style="margin-top:1.6rem; max-width:56ch;">Abrimos 10 cupos para grabar tu canción en noviembre. Todos se llevan su canción grabada, mezclada y masterizada, y cada proyecto compite por un premio: un videoclip y otra canción grabada gratis en el estudio nuevo de Clancy, en 2027.</p>
+
+    <!-- CUPOS: para actualizarlos cambia data-cupos-taken en <section id="pilot"> (cupos ya ocupados) -->
+    <div class="cupos" id="cupos" aria-live="polite">
+      <div class="cupos-text"><span class="cupos-num" id="cuposNum">10</span><span id="cuposLabel">cupos disponibles de 10</span></div>
+      <div class="cupos-pips" id="cuposPips" aria-hidden="true"></div>
+    </div>
+    <div class="pilot-cta" data-reserve-cta><a href="#aplicar" class="btn btn-solid">Quiero mi cupo</a></div>
+    <p class="cupos-closed" id="cuposClosed" hidden>Los 10 cupos están completos. Síguenos en Instagram para enterarte de las próximas sesiones.</p>
 
     <!-- OFERTA -->
     <div class="offer-card reveal">
@@ -978,7 +1024,7 @@
         </div>
         <div class="price-block">
           <div class="price-old">Valor comercial: $550.000 COP</div>
-          <div class="price-new">$260.000</div>
+          <div class="price-new">$380.000</div>
           <div class="price-label">precio de lanzamiento · COP</div>
         </div>
       </div>
@@ -990,17 +1036,29 @@
       </ul>
 
       <div class="payment-breakdown">
-        <div class="pay-item"><div class="amount">$25.000</div><div class="label">Reserva</div></div>
-        <div class="pay-item"><div class="amount">$235.000</div><div class="label" style="color:var(--yellow);">Saldo el día de la sesión</div></div>
-        <div class="pay-item"><div class="amount">$260.000</div><div class="label">Total</div></div>
+        <div class="pay-item"><div class="amount">$30.000</div><div class="label">Reserva</div></div>
+        <div class="pay-item"><div class="amount">$350.000</div><div class="label" style="color:var(--yellow);">Saldo en el estudio, el día de la sesión</div></div>
+        <div class="pay-item"><div class="amount">$380.000</div><div class="label">Total</div></div>
       </div>
-      <p class="form-note">La reserva se descuenta del valor total: no es un cobro adicional, sino la forma de confirmar tu fecha. Ten en cuenta que <strong>los $25.000 de la reserva no son reembolsables</strong>. Si necesitas reprogramar, puedes hacerlo con al menos <strong>48 horas de anticipación</strong> al inicio de tu sesión; pasado ese plazo, la reserva se pierde. La entrega final se realiza una vez completado el pago correspondiente.</p>
+      <p class="form-note">En línea solo pagas la reserva de $30.000, que se descuenta del valor total: no es un cobro adicional, sino la forma de confirmar tu fecha. Los $350.000 restantes los pagas en persona, en el estudio, el día de tu sesión, en efectivo, por transferencia o con llave. Ten en cuenta que <strong>los $30.000 de la reserva no son reembolsables</strong>. Si necesitas reprogramar, puedes hacerlo con al menos <strong>48 horas de anticipación</strong> al inicio de tu sesión; pasado ese plazo, la reserva se pierde. La entrega final se realiza una vez completado el pago correspondiente.</p>
 
       <!-- REEMPLAZAR: si el nombre del PDF cambia, actualizar el href y el atributo download aquí abajo -->
       <a href="Términos-y-condiciones-Pilot-Sessions-Clancy-Studios.pdf" download="Términos-y-condiciones-Pilot-Sessions-Clancy-Studios.pdf" class="btn btn-solid" style="margin-top:1.8rem;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>
         Términos y condiciones Pilot Sessions
       </a>
+    </div>
+
+    <!-- PREMIO -->
+    <div class="offer-card reveal">
+      <span class="kicker">El premio</span>
+      <h3 class="prize-title" style="margin-top:0.8rem;">Un videoclip y otra canción gratis.</h3>
+      <p class="lede" style="margin-top:1.2rem; max-width:56ch;">Cada proyecto que reserva envía un guion para un videoclip. Elegimos el guion que mejor encaje con el estudio nuevo de Clancy, y esa banda, grupo o artista gana:</p>
+      <ul class="offer-includes" style="margin-top:1.6rem;">
+        <li>Videoclip grabado con los equipos de Clancy</li><li>Otra canción grabada, sin costo</li><li>Grabación en el estudio nuevo en <strong style="color:var(--yellow);">2027</strong></li>
+      </ul>
+      <!-- REEMPLAZAR: presupuesto máximo del videoclip y enlace a las bases del premio, cuando estén definidos -->
+      <p class="form-note">No es una rifa ni un sorteo: no depende del azar. El ganador se elige por su guion. Todos los participantes se llevan su canción grabada, mezclada y masterizada, ganen o no.</p>
     </div>
 
     <!-- HORARIO -->
@@ -1023,33 +1081,31 @@
           <div class="desc">4 horas de estudio</div>
         </div>
       </div>
-      <p class="form-note" style="margin-top:2rem;">También es posible grabar la canción completa dividiendo el trabajo en 2 sesiones de 4 horas, en lugar de las 8 horas seguidas.</p>
+      <p class="form-note" style="margin-top:2rem;">También es posible grabar la canción completa dividiendo el trabajo en 2 sesiones de 4 horas, en lugar de las 8 horas seguidas. Las sesiones se realizan durante noviembre y eliges tu fecha al reservar.</p>
     </div>
 
     <!-- PROCESO DE SELECCIÓN -->
     <div class="offer-card reveal">
       <span class="kicker" style="display:inline-flex;">Cómo funciona</span>
       <div class="process-list">
-        <div class="process-item reveal"><span class="idx">01</span><div><h4>Aplicas</h4><p>Nos cuentas sobre tu proyecto: quién eres, qué canción quieres trabajar y qué buscas lograr.</p></div></div>
-        <div class="process-item reveal"><span class="idx">02</span><div><h4>Revisamos</h4><p>Evaluamos el proyecto y su compatibilidad con el formato, la disponibilidad y el espacio.</p></div></div>
-        <div class="process-item reveal"><span class="idx">03</span><div><h4>Te contactamos</h4><p>Si tu proyecto encaja con esta primera etapa, nos ponemos en contacto contigo.</p></div></div>
-        <div class="process-item reveal"><span class="idx">04</span><div><h4>Reservas</h4><p>Confirmas tu sesión con la reserva de $25.000 COP.</p></div></div>
-        <div class="process-item reveal"><span class="idx">05</span><div><h4>Creamos</h4><p>8 horas enfocadas en convertir la idea en una canción terminada.</p></div></div>
+        <!-- REEMPLAZAR: fecha límite para enviar el guion -->
+        <div class="process-item reveal"><span class="idx">01</span><div><h4>Te inscribes y envías tu guion</h4><p>Nos cuentas sobre tu proyecto y la idea del videoclip que te gustaría grabar.</p></div></div>
+        <div class="process-item reveal"><span class="idx">02</span><div><h4>Pagas y eliges fecha</h4><p>Confirmas tu cupo con la reserva de $30.000 COP, que se descuenta del total, y escoges tu día de noviembre.</p></div></div>
+        <div class="process-item reveal"><span class="idx">03</span><div><h4>Grabas en noviembre</h4><p>8 horas enfocadas en convertir la idea en una canción grabada, mezclada y masterizada.</p></div></div>
+        <div class="process-item reveal"><span class="idx">04</span><div><h4>Elegimos un guion</h4><p>Escogemos el que mejor encaje con el estudio nuevo de Clancy.</p></div></div>
+        <div class="process-item reveal"><span class="idx">05</span><div><h4>El ganador vuelve</h4><p>Graba su videoclip y otra canción, gratis, en el estudio nuevo, en 2027.</p></div></div>
       </div>
     </div>
 
-    <!-- FORMULARIO DE APLICACIÓN -->
-    <div id="aplicar" class="offer-card reveal">
-      <span class="kicker">Aplicar</span>
+    <!-- FORMULARIO DE INSCRIPCIÓN
+         REEMPLAZAR: pega en data-endpoint la URL de tu servicio de formularios (Formspree, Getform, Google Apps Script, etc.).
+         Sin endpoint el formulario avisa que no está conectado y no pierde datos en silencio. -->
+    <div id="aplicar" class="offer-card reveal" data-reserve-cta>
+      <span class="kicker">Inscripción</span>
       <h2 class="h-section" style="margin-top:1rem; font-size: clamp(2rem, 5vw, 3.2rem);">Quiero ser parte de las Pilot Sessions.</h2>
-      <p class="lede" style="margin-top:1.2rem;">Cuéntanos sobre tu proyecto. Esto no es un concurso — es una solicitud para participar en una experiencia de lanzamiento limitada.</p>
+      <p class="lede" style="margin-top:1.2rem;">Cuéntanos sobre tu proyecto y envíanos el guion de tu videoclip. Tu cupo queda confirmado cuando pagas la reserva.</p>
 
-      <!--
-        REEMPLAZAR: este formulario puede quedarse tal cual (con su propio backend) o
-        redirigir a Google Forms / Typeform. Si usas una herramienta externa, cambia el
-        atributo action y method, o simplemente enlaza un botón al formulario externo.
-      -->
-      <form class="form-grid" id="pilotForm" action="#" method="post">
+      <form class="form-grid" id="pilotForm" action="#" method="post" data-endpoint="">
         <div class="field"><label for="artista">Nombre del artista / grupo / proyecto</label><input id="artista" name="artista" type="text" required></div>
         <div class="field"><label for="responsable">Nombre del responsable</label><input id="responsable" name="responsable" type="text" required></div>
         <div class="field"><label for="whatsapp">WhatsApp</label><input id="whatsapp" name="whatsapp" type="tel" required></div>
@@ -1057,25 +1113,25 @@
         <div class="field"><label for="correo">Correo</label><input id="correo" name="correo" type="email" required></div>
         <div class="field"><label for="genero">Género musical</label><input id="genero" name="genero" type="text"></div>
         <div class="field full"><label for="cancion">Nombre de la canción / proyecto</label><input id="cancion" name="cancion" type="text"></div>
-        <div class="field full"><label for="demo">Demo o enlace de referencia <span style="color:var(--red);">*Por favor enlace de YouTube</span></label><input id="demo" name="demo" type="url" placeholder="https://"></div>
+        <div class="field full"><label for="guion">Guion del videoclip <span style="color:var(--red);">*Enlace de Google Docs o Drive, con acceso para cualquiera con el enlace</span></label><input id="guion" name="guion" type="url" placeholder="https://" required></div>
         <div class="field full"><label for="referencias">Referencias musicales</label><input id="referencias" name="referencias" type="text"></div>
         <div class="field full"><label for="objetivo">¿Qué quieres conseguir con esta sesión?</label><textarea id="objetivo" name="objetivo"></textarea></div>
-        <div class="field"><label for="participantes">Número de participantes activos</label><input id="participantes" name="participantes" type="number" min="1" max="99"></div>
-        <div class="field"><label for="disponibilidad">Disponibilidad</label><input id="disponibilidad" name="disponibilidad" type="text" placeholder="Días / horarios posibles"></div>
+        <div class="field"><label for="participantes">Número de participantes activos <span style="color:var(--red);">*Máximo 5 personas activas en el proyecto: el espacio es reducido por ahora</span></label><input id="participantes" name="participantes" type="number" min="1" max="5"></div>
         <div class="field full"><label for="funciones">¿Quiénes participarán y qué función tendrán?</label><textarea id="funciones" name="funciones"></textarea></div>
         <div class="field"><label for="snack">Snack favorito</label><input id="snack" name="snack" type="text"></div>
         <div class="field"><label for="bebida">Bebida favorita</label><input id="bebida" name="bebida" type="text"></div>
 
         <div class="form-actions field full">
-          <button type="submit" class="btn btn-solid">Aplicar a Pilot Sessions</button>
+          <button type="submit" class="btn btn-solid">Enviar mi inscripción</button>
         </div>
       </form>
-      <p class="form-note">Al aplicar nos ayudas a entender si tu proyecto es compatible con el formato del piloto: el espacio, la disponibilidad y la dinámica de la sesión.</p>
+      <p class="form-msg" id="pilotMsg" role="status" hidden></p>
+      <p class="form-note" style="color:var(--yellow);">Después de enviar el formulario, reserva tu cupo en la sección de reservas para confirmarlo.</p>
     </div>
 
     <!--
       NOTA PARA DESPUÉS DEL PILOTO:
-      Cuando se completen los primeros 8 proyectos, esta sección (id="pilot") puede
+      Cuando se completen los primeros 10 proyectos, esta sección (id="pilot") puede
       renombrarse a "Clancy Sessions", "Trabaja con nosotros" o "Reserva una sesión"
       sin tener que rediseñar el resto de la página. Basta con:
         1. Cambiar el badge "Lanzamiento" y el título "CLANCY PILOT SESSIONS".
@@ -1106,6 +1162,37 @@
   </div>
 </section>
 
+<!-- ============ 10b. RESERVAS (Wompi + Cal.com) ============ -->
+<!-- REEMPLAZAR: data-wompi-url = enlace de pago de Wompi (ej. https://checkout.wompi.co/l/XXXXXX).
+                 En Wompi configura la URL de redirección después del pago como: https://clancystudiosco.com/#fecha
+                 data-cal-link = tu página de reservas de Cal.com (ej. https://cal.com/clancystudios/pilot-session o solo clancystudios/pilot-session) -->
+<section class="section" id="reservar" data-wompi-url="" data-cal-link="">
+  <div class="wrap">
+    <span class="kicker">Reservas</span>
+    <h2 class="h-section" style="margin-top:1rem;">Reserva tu sesión.</h2>
+    <p class="lede" style="margin-top:1.2rem;">Tu cupo queda confirmado en dos pasos: primero pagas la reserva y luego eliges tu fecha.</p>
+
+    <div class="offer-card reveal" id="pasoPago">
+      <span class="kicker">Paso 1 — Paga tu reserva</span>
+      <div class="payment-breakdown" style="margin-top:2rem; border-top:0; padding-top:0;">
+        <div class="pay-item"><div class="amount">$30.000</div><div class="label">Reserva (hoy)</div></div>
+        <div class="pay-item"><div class="amount">$350.000</div><div class="label" style="color:var(--yellow);">Saldo en el estudio, el día de la sesión</div></div>
+        <div class="pay-item"><div class="amount">$380.000</div><div class="label">Total</div></div>
+      </div>
+      <a id="wompiBtn" href="#" class="btn btn-solid" target="_blank" rel="noopener" aria-disabled="true" style="margin-top:2rem;">Pagar reserva con Wompi</a>
+      <p class="form-note">En línea solo pagas los $30.000 de la reserva, en el sitio seguro de Wompi; el saldo de $350.000 lo pagas en el estudio el día de tu sesión, en efectivo, por transferencia o con llave. Usa el mismo correo de tu inscripción para que podamos identificar tu reserva. <strong>Los $30.000 no son reembolsables</strong>; puedes reprogramar con al menos <strong>48 horas de anticipación</strong>.</p>
+      <p class="form-note" style="color:var(--yellow);">Al terminar el pago, Wompi te trae de vuelta aquí para elegir tu fecha. Si no te redirige, <a href="https://wa.me/573197248697" target="_blank" rel="noopener" style="text-decoration:underline;">escríbenos por WhatsApp</a> y te enviamos el enlace.</p>
+    </div>
+
+    <!-- Paso 2: solo aparece cuando Wompi redirige a #fecha -->
+    <div class="offer-card reveal" id="fecha" hidden>
+      <span class="kicker">Paso 2 — Elige tu fecha</span>
+      <p class="lede" style="margin-top:1.2rem;">Elige tu día de noviembre. Las fechas ocupadas ya no aparecen.</p>
+      <div id="calFrame" style="margin-top:2rem;"></div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ 11. FOOTER ============ -->
 <footer>
   <div class="wrap">
@@ -1127,13 +1214,13 @@
         <div class="footer-col">
           <h5>Lanzamiento</h5>
           <a href="#pilot">Pilot Sessions</a>
-          <a href="#aplicar">Aplicar</a>
+          <a href="#aplicar" data-reserve-cta>Inscribirme</a>
         </div>
         <div class="footer-col">
           <h5>Contacto</h5>
           <!-- REEMPLAZAR: redes y correo reales -->
           <a href="mailto:contacto@clancystudiosco.com">Correo</a>
-          <a href="https://instagram.com/clancystudios" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://instagram.com/clancystudiosco" target="_blank" rel="noopener">Instagram</a>
           <a href="https://wa.me/573197248697" target="_blank" rel="noopener">WhatsApp</a>
         </div>
       </div>
@@ -1216,15 +1303,99 @@
     setInterval(draw, 140);
   }
 
-  // Form: placeholder submit handler (reemplazar por integración real / Google Forms / Typeform)
+  // Spotify: carga la playlist si data-playlist-id tiene un enlace o ID
+  var sp = document.getElementById('spotifyFrame');
+  if(sp){
+    var raw = (sp.getAttribute('data-playlist-id') || '').trim();
+    var m = raw.match(/playlist\/([A-Za-z0-9]+)/);
+    var pid = m ? m[1] : raw;
+    if(/^[A-Za-z0-9]{10,}$/.test(pid)){
+      sp.innerHTML = '<iframe title="Playlist de Spotify — Clancy Studios" src="https://open.spotify.com/embed/playlist/' + pid + '?utm_source=generator&theme=0" width="100%" height="352" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
+    }
+  }
+
+  // Reservas: pago en Wompi (paso 1) y agenda de Cal.com (paso 2, se abre al volver del pago en #fecha o con el botón)
+  var res = document.getElementById('reservar');
+  if(res){
+    var wu = (res.getAttribute('data-wompi-url') || '').trim();
+    var wb = document.getElementById('wompiBtn');
+    if(wb && /^https:\/\/(checkout\.wompi\.co|wompi\.com|wompi\.co)\//.test(wu)){
+      wb.href = wu; wb.removeAttribute('aria-disabled');
+    }
+    var calRaw = (res.getAttribute('data-cal-link') || '').trim();
+    var cm = calRaw.match(/^(?:https:\/\/(?:app\.)?cal\.com\/)?([A-Za-z0-9._-]+\/[A-Za-z0-9._\/-]+)$/);
+    var fcard = document.getElementById('fecha');
+    var cf = document.getElementById('calFrame');
+    var showFecha = function(){
+      if(!fcard || !cf){ return; }
+      fcard.hidden = false;
+      fcard.classList.add('in');
+      if(!cf.firstChild){
+        if(cm){
+          var url = 'https://cal.com/' + cm[1] + '?theme=dark';
+          cf.innerHTML = '<iframe title="Elegir fecha — Clancy Studios" src="' + url + '" width="100%" height="700" loading="lazy" style="border:0;background:transparent;"></iframe>' +
+                         '<p class="form-note"><a href="' + url + '" target="_blank" rel="noopener">Abrir la agenda en una pestaña nueva</a></p>';
+        } else {
+          cf.innerHTML = '<div class="video-placeholder" style="padding:3rem 1rem;">Agenda de fechas — próximamente</div>';
+        }
+      }
+      fcard.scrollIntoView();
+    };
+    if(location.hash === '#fecha'){ showFecha(); }
+    window.addEventListener('hashchange', function(){ if(location.hash === '#fecha'){ showFecha(); } });
+  }
+
+  // Cupos Pilot Sessions: se actualizan cambiando data-cupos-taken en <section id="pilot">
+  var pilot = document.getElementById('pilot');
+  if(pilot){
+    var total = parseInt(pilot.getAttribute('data-cupos-total'), 10) || 10;
+    var taken = Math.max(0, parseInt(pilot.getAttribute('data-cupos-taken'), 10) || 0);
+    var left = Math.max(0, total - taken);
+    var num = document.getElementById('cuposNum');
+    var label = document.getElementById('cuposLabel');
+    var pips = document.getElementById('cuposPips');
+    if(num){ num.textContent = left; }
+    if(label){ label.textContent = (left === 1 ? 'cupo disponible' : 'cupos disponibles') + ' de ' + total; }
+    if(pips){
+      var h = '';
+      for(var i = 0; i < total; i++){ h += '<i class="' + (i < left ? '' : 'taken') + '"></i>'; }
+      pips.innerHTML = h;
+    }
+    if(left === 0){
+      document.querySelectorAll('[data-reserve-cta]').forEach(function(el){ el.hidden = true; });
+      var closed = document.getElementById('cuposClosed');
+      if(closed){ closed.hidden = false; }
+      var resv = document.getElementById('reservar');
+      var pp = document.getElementById('pasoPago');
+      if(pp){ pp.hidden = true; }
+      if(resv && location.hash !== '#fecha'){ resv.hidden = true; }
+    }
+  }
+
+  // Formulario de inscripción: envía a data-endpoint; si no está configurado, lo avisa en lugar de simular éxito
   var form = document.getElementById('pilotForm');
   if(form){
     form.addEventListener('submit', function(ev){
       ev.preventDefault();
-      // REEMPLAZAR: aquí puedes redirigir a un Google Form / Typeform,
-      // o conectar este formulario a tu propio backend / servicio de email.
-      alert('Gracias por tu aplicación. Te contactaremos pronto por WhatsApp o correo.');
-      form.reset();
+      var msg = document.getElementById('pilotMsg');
+      var endpoint = (form.getAttribute('data-endpoint') || '').trim();
+      if(!/^https:\/\//.test(endpoint)){
+        msg.textContent = 'El formulario aún no está conectado. Escríbenos por WhatsApp para inscribirte.';
+        msg.hidden = false;
+        return;
+      }
+      var btn = form.querySelector('button[type=submit]');
+      btn.disabled = true;
+      fetch(endpoint, { method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(form) })
+        .then(function(r){
+          if(!r.ok){ throw new Error('envio'); }
+          msg.textContent = 'Recibimos tu inscripción y tu guion. Ahora reserva tu cupo más abajo para confirmarlo.';
+          form.reset();
+        })
+        .catch(function(){
+          msg.textContent = 'No pudimos enviar el formulario. Inténtalo de nuevo o escríbenos por WhatsApp.';
+        })
+        .then(function(){ msg.hidden = false; btn.disabled = false; });
     });
   }
 })();
