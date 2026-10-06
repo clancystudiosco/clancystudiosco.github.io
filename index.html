@@ -545,10 +545,10 @@
   .gear-cat{ padding: 2rem 0; border-top:1px solid var(--line); }
   @media (min-width: 720px){ .gear-cat{ padding: 2rem 2.5rem 2rem 0; } .gear-cat:nth-child(even){ padding-left:2.5rem; padding-right:0; border-left: 1px solid var(--line); } }
   .gear-cat h3{ font-family: var(--f-label); font-weight:600; letter-spacing:0.04em; color: var(--yellow); font-size:0.95rem; margin-bottom:1rem; }
-  .gear-list{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:0.6rem; }
-  .gear-list li{ display:flex; flex-direction:column; gap:0.15rem; border:1px solid var(--line-strong); padding:0.55rem 0.9rem; max-width:min(100%, 300px); }
-  .gear-list b{ font-weight:600; font-size:0.9rem; color: var(--ink); }
-  .gear-list span{ font-size:0.78rem; line-height:1.4; color: var(--muted); text-shadow: 0 1px 6px rgba(0,0,0,0.6); }
+  .gear-list{ list-style:none; margin:0; padding:0; display:grid; gap:0.8rem; }
+  .gear-list li{ display:flex; flex-direction:column; gap:0.1rem; }
+  .gear-list b{ font-weight:600; font-size:0.95rem; color: var(--ink); }
+  .gear-list span{ font-size:0.84rem; color: var(--muted); text-shadow: 0 1px 6px rgba(0,0,0,0.6); }
   .tag-row{ display:flex; flex-wrap:wrap; gap:0.6rem; }
   .tag{
     font-family: var(--f-body); font-size: 0.86rem; color: var(--ink);
@@ -802,14 +802,7 @@
     </div>
     <div class="reveal">
       <div class="video-frame">
-        <!-- BIENVENIDA EMBED: REEMPLAZAR AQUÍ CON EL IFRAME REAL DE YOUTUBE/VIMEO -->
-        <!--
-        <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="Bienvenido a Clancy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        -->
-        <div class="video-placeholder">
-          <div class="play-dot"></div>
-          Video de bienvenida — próximamente
-        </div>
+        <iframe src="https://www.youtube.com/embed/3HHxqF_9vjA" title="Bienvenido a Clancy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
     </div>
   </div>
@@ -1142,6 +1135,26 @@
   </div>
 </section>
 
+<!-- ============ 10. CONTACTO ============ -->
+<section class="section contact-section" id="contacto">
+  <div class="wrap">
+    <span class="kicker" style="justify-content:center;">Contacto</span>
+    <h2 class="h-section" style="margin-top:1rem;">Hablemos de tu proyecto.</h2>
+    <div class="contact-links">
+      <!-- REEMPLAZAR: correo y redes sociales reales -->
+      <a href="mailto:contacto@clancystudiosco.com">contacto@clancystudiosco.com</a>
+      <a href="https://instagram.com/clancystudiosco" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://tiktok.com/@clancystudiosco" target="_blank" rel="noopener">TikTok</a>
+      <a href="https://youtube.com/@clancystudiosco" target="_blank" rel="noopener">YouTube</a>
+      <span style="color:var(--muted-dim); font-family:var(--f-label); font-size:0.95rem;">Usaquén, Bogotá</span>
+    </div>
+    <div class="contact-cta">
+      <!-- REEMPLAZAR AQUÍ CON EL ENLACE REAL DE WHATSAPP -->
+      <a href="https://wa.me/573197248697?text=Hola%20Clancy%2C%20quiero%20agendar%20una%20sesi%C3%B3n" class="btn btn-solid" target="_blank" rel="noopener">Agendar sesión</a>
+    </div>
+  </div>
+</section>
+
 <!-- ============ 10b. RESERVAS (Wompi + Cal.com) ============ -->
 <!-- REEMPLAZAR: data-wompi-url = enlace de pago de Wompi (ej. https://checkout.wompi.co/l/XXXXXX).
                  En Wompi configura la URL de redirección después del pago como: https://clancystudiosco.com/#fecha
@@ -1169,26 +1182,6 @@
       <span class="kicker">Paso 2 — Elige tu fecha</span>
       <p class="lede" style="margin-top:1.2rem;">Elige tu día de noviembre. Las fechas ocupadas ya no aparecen.</p>
       <div id="calFrame" style="margin-top:2rem;"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 10. CONTACTO ============ -->
-<section class="section contact-section" id="contacto">
-  <div class="wrap">
-    <span class="kicker" style="justify-content:center;">Contacto</span>
-    <h2 class="h-section" style="margin-top:1rem;">Hablemos de tu proyecto.</h2>
-    <div class="contact-links">
-      <!-- REEMPLAZAR: correo y redes sociales reales -->
-      <a href="mailto:contacto@clancystudiosco.com">contacto@clancystudiosco.com</a>
-      <a href="https://instagram.com/clancystudiosco" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://tiktok.com/@clancystudiosco" target="_blank" rel="noopener">TikTok</a>
-      <a href="https://youtube.com/@clancystudiosco" target="_blank" rel="noopener">YouTube</a>
-      <span style="color:var(--muted-dim); font-family:var(--f-label); font-size:0.95rem;">Usaquén, Bogotá</span>
-    </div>
-    <div class="contact-cta">
-      <!-- REEMPLAZAR AQUÍ CON EL ENLACE REAL DE WHATSAPP -->
-      <a href="https://wa.me/573197248697?text=Hola%20Clancy%2C%20quiero%20agendar%20una%20sesi%C3%B3n" class="btn btn-solid" target="_blank" rel="noopener">Agendar sesión</a>
     </div>
   </div>
 </section>
