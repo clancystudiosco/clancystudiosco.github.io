@@ -570,6 +570,14 @@
     display:flex; align-items:center; justify-content:center;
     color: var(--muted-dim); font-family:var(--f-label); font-size:0.78rem; letter-spacing:0.08em;
   }
+  .work-card .photo{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit: cover; display:block;
+  }
+  .work-card .shade{
+    position:absolute; inset:0; pointer-events:none;
+    background: linear-gradient(160deg, rgba(10,10,10,0.08) 0%, rgba(5,5,5,0.22) 100%);
+  }
   .work-card .info{
     position:relative; z-index:1; padding: 1.3rem; width:100%;
     background: linear-gradient(to top, rgba(5,5,5,0.85), transparent);
@@ -991,8 +999,9 @@
     <div class="work-grid">
       <!-- REEMPLAZAR: cada work-card con foto y nombre real del artista o productor -->
       <div class="work-card reveal">
-        <div class="ph">Foto del artista</div>
-        <div class="info"><h4>Nombre del artista</h4><span>Artista — Género</span></div>
+        <img src="Eleonoxx.jpg" alt="Eleonoxx" class="photo">
+        <div class="shade"></div>
+        <div class="info"><h4>Eleonoxx</h4><span>Artista — Trap / Urbano</span></div>
       </div>
       <div class="work-card reveal">
         <div class="ph">Foto del artista</div>
