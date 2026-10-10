@@ -305,7 +305,7 @@
   .nav-logo img{ height: 34px; width:auto; }
   .nav-logo span{ font-family: var(--f-label); font-weight:600; font-size:0.95rem; letter-spacing:0.05em; }
 
-  nav.nav-links{ display:flex; gap:2rem; }
+  nav.nav-links{ display:flex; gap:clamp(1rem, 1.6vw, 2rem); }
   nav.nav-links a{
     font-family: var(--f-label);
     font-size: 0.82rem;
@@ -314,6 +314,7 @@
     color: var(--muted);
     position:relative;
     padding-bottom: 4px;
+    white-space: nowrap;
   }
   nav.nav-links a::after{
     content:""; position:absolute; left:0; right:0; bottom:0; height:1px;
@@ -324,14 +325,14 @@
   nav.nav-links a:hover::after{ transform: scaleX(1); }
 
   .nav-cta{ display:none; }
-  @media (min-width: 900px){ .nav-cta{ display:inline-flex; padding: 0.7em 1.4em; font-size:0.78rem; } }
+  @media (min-width: 1100px){ .nav-cta{ display:inline-flex; padding: 0.7em 1.4em; font-size:0.78rem; } }
 
   .nav-toggle{
     display:flex; flex-direction:column; gap:5px; background:none; border:0; cursor:pointer; padding: 8px;
   }
   .nav-toggle span{ width:24px; height:2px; background: var(--ink); display:block; transition: transform .3s ease, opacity .3s ease; }
-  @media (min-width: 900px){ .nav-toggle{ display:none; } }
-  @media (max-width: 899px){ nav.nav-links{ display:none; } }
+  @media (min-width: 1100px){ .nav-toggle{ display:none; } }
+  @media (max-width: 1099px){ nav.nav-links{ display:none; } }
 
   .mobile-menu{
     position: fixed; inset:0; background: var(--bg); z-index: 999;
@@ -445,6 +446,11 @@
   }
 
   /* ============ BIENVENIDO ============ */
+  @media (min-width: 900px){
+    .split-welcome{ grid-template-columns: 0.72fr 1.28fr; gap: 3.5rem; align-items: center; }
+  }
+  @media (min-width: 1200px){ #bienvenido > .wrap{ max-width: 1360px; } }
+  #bienvenido .video-frame{ width:100%; box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
   .video-frame{
     position: relative;
     aspect-ratio: 16/9;
@@ -479,7 +485,21 @@
     background: var(--bg-raise);
     padding: 1.1rem;
   }
-  .embed-frame iframe{ width:100%; border:0; display:block; border-radius:12px; }
+  .embed-frame{ position:relative; }
+  .embed-frame iframe{ width:100%; height:480px; border:0; display:block; border-radius:12px; }
+  @media (min-width: 900px){ .embed-frame iframe{ height:620px; } }
+  .embed-frame:has(iframe)::after{
+    content:""; position:absolute; left:1.1rem; right:1.1rem; bottom:1.1rem; height:70px;
+    border-radius:0 0 12px 12px; pointer-events:none;
+    background: linear-gradient(to top, rgba(5,5,5,0.92), rgba(5,5,5,0));
+  }
+  .scroll-hint{ display:flex; align-items:center; gap:0.7rem; margin-top:2rem; font-family:var(--f-label); font-size:0.82rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--yellow); }
+  .scroll-hint .arrows{ display:inline-flex; flex-direction:column; line-height:0.6; animation: hintBob 1.4s ease-in-out infinite; }
+  .scroll-hint .arrows svg{ width:14px; height:14px; display:block; }
+  @keyframes hintBob{ 0%,100%{ transform:translateY(-3px); } 50%{ transform:translateY(3px); } }
+  .spotify-more{ margin-top:1rem; font-family:var(--f-label); font-size:0.85rem; letter-spacing:0.05em; }
+  .spotify-more a{ color:var(--ink); text-decoration:underline; text-underline-offset:4px; }
+  @media (prefers-reduced-motion: reduce){ .scroll-hint .arrows{ animation:none; } }
 
   /* ============ 3D TOUR ============ */
   .tour-frame{
@@ -558,12 +578,18 @@
   /* ============ PORTAFOLIO ============ */
   .work-grid{ display:grid; grid-template-columns:1fr; gap: 2rem; margin-top:3rem; }
   @media (min-width: 700px){ .work-grid{ grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1050px){ .work-grid{ grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1050px){ .work-grid{ grid-template-columns: repeat(4, 1fr); } }
   .work-card{
     position:relative; aspect-ratio: 4/5; background: var(--bg-raise);
     border: 1px solid var(--line);
     overflow:hidden; display:flex; align-items:flex-end;
   }
+  a.work-card{ text-decoration:none; color:inherit; cursor:pointer; }
+  a.work-card .photo{ transition: transform .6s var(--ease); }
+  a.work-card:hover .photo, a.work-card:focus-visible .photo{ transform: scale(1.05); }
+  a.work-card:hover, a.work-card:focus-visible{ border-color: var(--red); outline:none; }
+  .work-card .go{ position:absolute; top:0.9rem; right:0.9rem; z-index:2; width:34px; height:34px; border-radius:50%; background:rgba(5,5,5,0.7); border:1px solid var(--line-strong); color:var(--ink); display:flex; align-items:center; justify-content:center; transition: background .3s, color .3s; }
+  a.work-card:hover .go{ background:var(--red); color:#050505; }
   .work-card .ph{
     position:absolute; inset:0;
     background: linear-gradient(160deg, rgba(21,18,18,0.45) 0%, rgba(10,10,10,0.5) 70%);
@@ -583,6 +609,8 @@
     background: linear-gradient(to top, rgba(5,5,5,0.85), transparent);
   }
   .work-card .info h4{ font-family: var(--f-label); font-weight:600; font-size:1rem; margin:0 0 0.2rem; }
+  .offer-note{ margin:1.8rem 0 0; padding:1rem 1.2rem; border-left:3px solid var(--yellow); background:rgba(5,5,5,0.35); font-size:0.95rem; color:var(--ink); }
+  .offer-note strong{ color:var(--yellow); }
   .work-card .info span{ font-size:0.82rem; color: var(--muted); }
 
   /* ============ PILOT SESSIONS ============ */
@@ -756,8 +784,10 @@
     </a>
     <nav class="nav-links" aria-label="Navegación principal">
       <a href="#sonido">Sonido</a>
+      <a href="#tour3d">Tour 3D</a>
       <a href="#experiencia">Experiencia</a>
       <a href="#servicios">Servicios</a>
+      <a href="#equipo">Equipamiento</a>
       <a href="#trabajos">Trabajos</a>
       <a href="#pilot">Pilot Sessions</a>
       <a href="#contacto">Contacto</a>
@@ -772,8 +802,10 @@
 
 <div class="mobile-menu" id="mobileMenu">
   <a href="#sonido">Sonido</a>
+  <a href="#tour3d">Tour 3D</a>
   <a href="#experiencia">Experiencia</a>
   <a href="#servicios">Servicios</a>
+  <a href="#equipo">Equipamiento</a>
   <a href="#trabajos">Trabajos</a>
   <a href="#pilot">Pilot Sessions</a>
   <a href="#contacto">Contacto</a>
@@ -801,7 +833,7 @@
 
 <!-- ============ 2. BIENVENIDO A CLANCY ============ -->
 <section class="section" id="bienvenido">
-  <div class="wrap split">
+  <div class="wrap split split-welcome">
     <div class="reveal">
       <span class="kicker">Quiénes somos</span>
       <img src="Bienvenida.png" alt="Bienvenido a Clancy" class="bienvenida-title-img" style="margin-top:1rem;">
@@ -821,10 +853,12 @@
   <div class="wrap">
     <span class="kicker">Nuestro sonido</span>
     <h2 class="h-section" style="margin-top:1rem;">Canciones, ideas y proyectos<br>que han pasado por Clancy.</h2>
+    <div class="scroll-hint" aria-hidden="true"><span class="arrows"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 14l6 6 6-6"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 14l6 6 6-6"/></svg></span>Desliza dentro del reproductor: hay muchas más canciones</div>
     <!-- SPOTIFY: pega el enlace o el ID de tu playlist en data-playlist-id (ver script al final) -->
-    <div class="embed-frame" id="spotifyFrame" data-playlist-id="https://open.spotify.com/playlist/3pzhtrMgSbrr90IjTuzI5L" style="margin-top:3rem;">
+    <div class="embed-frame" id="spotifyFrame" data-playlist-id="https://open.spotify.com/playlist/3pzhtrMgSbrr90IjTuzI5L" style="margin-top:1rem;">
       <div class="video-placeholder" style="padding:4rem 2rem;">Playlist de Spotify — próximamente</div>
     </div>
+    <p class="spotify-more"><a href="https://open.spotify.com/playlist/3pzhtrMgSbrr90IjTuzI5L" target="_blank" rel="noopener">Ver la playlist completa en Spotify ↗</a></p>
   </div>
 </section>
 
@@ -997,21 +1031,31 @@
     <p class="lede" style="margin-top:1.2rem;">Estos son algunos de los artistas y productores con quienes hemos trabajado: ideas que llegaron al estudio y salieron convertidas en canciones.</p>
 
     <div class="work-grid">
-      <!-- REEMPLAZAR: cada work-card con foto y nombre real del artista o productor -->
-      <div class="work-card reveal">
+      <!-- Cada tarjeta enlaza al Instagram del artista o productor -->
+      <a class="work-card reveal" href="https://www.instagram.com/eleonoxx__/" target="_blank" rel="noopener" aria-label="Eleonoxx — abrir perfil">
         <img src="Eleonoxx.jpg" alt="Eleonoxx" class="photo">
         <div class="shade"></div>
+        <span class="go" aria-hidden="true">↗</span>
         <div class="info"><h4>Eleonoxx</h4><span>Artista — Trap / Urbano</span></div>
-      </div>
-      <div class="work-card reveal">
+      </a>
+      <a class="work-card reveal" href="https://www.instagram.com/kalido/" target="_blank" rel="noopener" aria-label="Kalido — abrir perfil">
         <img src="Kalido.jpg" alt="Kalido" class="photo">
         <div class="shade"></div>
+        <span class="go" aria-hidden="true">↗</span>
         <div class="info"><h4>Kalido</h4><span>Artista — Urbano</span></div>
-      </div>
-      <div class="work-card reveal">
-        <div class="ph">Foto del productor</div>
-        <div class="info"><h4>Nombre del productor</h4><span>Productor — Género</span></div>
-      </div>
+      </a>
+      <a class="work-card reveal" href="https://www.instagram.com/luaxx.beats/" target="_blank" rel="noopener" aria-label="Luaxx — abrir perfil">
+        <img src="Luaxx.jpg" alt="Luaxx" class="photo">
+        <div class="shade"></div>
+        <span class="go" aria-hidden="true">↗</span>
+        <div class="info"><h4>Luaxx</h4><span>Productor — Todo terreno</span></div>
+      </a>
+      <a class="work-card reveal" href="https://www.instagram.com/prodsanty/" target="_blank" rel="noopener" aria-label="Xanty — abrir perfil">
+        <img src="Xanty.jpg" alt="Xanty" class="photo">
+        <div class="shade"></div>
+        <span class="go" aria-hidden="true">↗</span>
+        <div class="info"><h4>Xanty</h4><span>Productor — Urbano</span></div>
+      </a>
     </div>
   </div>
 </section>
@@ -1043,7 +1087,7 @@
         </div>
         <div class="price-block">
           <div class="price-old">Valor comercial: $550.000 COP</div>
-          <div class="price-new">$380.000</div>
+          <div class="price-new">$420.000</div>
           <div class="price-label">precio de lanzamiento · COP</div>
         </div>
       </div>
@@ -1054,12 +1098,14 @@
         <li>2 revisiones de mezcla</li><li>2 revisiones de mastering</li>
       </ul>
 
+      <p class="offer-note"><strong>Importante:</strong> las Pilot Sessions <strong>no incluyen productor musical</strong>. El paquete cubre la grabación, edición, mezcla y mastering de tu canción; la producción musical (composición, beat y arreglos) no hace parte de esta oferta.</p>
+
       <div class="payment-breakdown">
-        <div class="pay-item"><div class="amount">$30.000</div><div class="label">Reserva</div></div>
-        <div class="pay-item"><div class="amount">$350.000</div><div class="label" style="color:var(--yellow);">Saldo en el estudio, el día de la sesión</div></div>
-        <div class="pay-item"><div class="amount">$380.000</div><div class="label">Total</div></div>
+        <div class="pay-item"><div class="amount">$40.000</div><div class="label">Reserva</div></div>
+        <div class="pay-item"><div class="amount">$380.000</div><div class="label" style="color:var(--yellow);">Saldo en el estudio, el día de la sesión</div></div>
+        <div class="pay-item"><div class="amount">$420.000</div><div class="label">Total</div></div>
       </div>
-      <p class="form-note">En línea solo pagas la reserva de $30.000, que se descuenta del valor total: no es un cobro adicional, sino la forma de confirmar tu fecha. Los $350.000 restantes los pagas en persona, en el estudio, el día de tu sesión, en efectivo, por transferencia o con llave. Ten en cuenta que <strong>los $30.000 de la reserva no son reembolsables</strong>. Si necesitas reprogramar, puedes hacerlo con al menos <strong>48 horas de anticipación</strong> al inicio de tu sesión; pasado ese plazo, la reserva se pierde. La entrega final se realiza una vez completado el pago correspondiente.</p>
+      <p class="form-note">En línea solo pagas la reserva de $40.000, que se descuenta del valor total: no es un cobro adicional, sino la forma de confirmar tu fecha. Los $380.000 restantes los pagas en persona, en el estudio, el día de tu sesión, en efectivo, por transferencia o con llave. Ten en cuenta que <strong>los $40.000 de la reserva no son reembolsables</strong>. Si necesitas reprogramar, puedes hacerlo con al menos <strong>48 horas de anticipación</strong> al inicio de tu sesión; pasado ese plazo, la reserva se pierde. La entrega final se realiza una vez completado el pago correspondiente.</p>
 
       <!-- REEMPLAZAR: si el nombre del PDF cambia, actualizar el href y el atributo download aquí abajo -->
       <a href="Términos-y-condiciones-Pilot-Sessions-Clancy-Studios.pdf" download="Términos-y-condiciones-Pilot-Sessions-Clancy-Studios.pdf" class="btn btn-solid" style="margin-top:1.8rem;">
@@ -1072,12 +1118,12 @@
     <div class="offer-card reveal">
       <span class="kicker">El premio</span>
       <h3 class="prize-title" style="margin-top:0.8rem;">Un videoclip y otra canción gratis.</h3>
-      <p class="lede" style="margin-top:1.2rem; max-width:56ch;">Cada proyecto que reserva envía un guion para un videoclip. Elegimos el guion que mejor encaje con el estudio nuevo de Clancy, y esa banda, grupo o artista gana:</p>
+      <p class="lede" style="margin-top:1.2rem; max-width:56ch;">El premio se decide por el <strong>guion de un videoclip</strong>: un documento corto donde cuentas la idea de tu video (de qué trata, qué pasa, cómo se ve, dónde y con quién se grabaría). Lo envías como enlace de Google Docs o Drive en el formulario de inscripción. De todos los guiones recibidos, elegimos el que mejor encaje con el estudio nuevo de Clancy, y esa banda, grupo o artista gana:</p>
       <ul class="offer-includes" style="margin-top:1.6rem;">
         <li>Videoclip grabado con los equipos de Clancy</li><li>Otra canción grabada, sin costo</li><li>Grabación en el estudio nuevo en <strong style="color:var(--yellow);">2027</strong></li>
       </ul>
       <!-- REEMPLAZAR: presupuesto máximo del videoclip y enlace a las bases del premio, cuando estén definidos -->
-      <p class="form-note">No es una rifa ni un sorteo: no depende del azar. El ganador se elige por su guion. Todos los participantes se llevan su canción grabada, mezclada y masterizada, ganen o no.</p>
+      <p class="form-note">No es una rifa ni un sorteo: no depende del azar. El ganador se elige por su guion, y solo participan los proyectos que enviaron uno. Tu canción grabada, mezclada y masterizada es tuya ganes o no, y enviar el guion es opcional.</p>
     </div>
 
     <!-- HORARIO -->
@@ -1109,7 +1155,7 @@
       <div class="process-list">
         <!-- REEMPLAZAR: fecha límite para enviar el guion -->
         <div class="process-item reveal"><span class="idx">01</span><div><h4>Te inscribes y envías tu guion</h4><p>Nos cuentas sobre tu proyecto y la idea del videoclip que te gustaría grabar.</p></div></div>
-        <div class="process-item reveal"><span class="idx">02</span><div><h4>Pagas y eliges fecha</h4><p>Confirmas tu cupo con la reserva de $30.000 COP, que se descuenta del total, y escoges tu día de noviembre.</p></div></div>
+        <div class="process-item reveal"><span class="idx">02</span><div><h4>Pagas y eliges fecha</h4><p>Confirmas tu cupo con la reserva de $40.000 COP, que se descuenta del total, y escoges tu día de noviembre.</p></div></div>
         <div class="process-item reveal"><span class="idx">03</span><div><h4>Grabas en noviembre</h4><p>8 horas enfocadas en convertir la idea en una canción grabada, mezclada y masterizada.</p></div></div>
         <div class="process-item reveal"><span class="idx">04</span><div><h4>Elegimos un guion</h4><p>Escogemos el que mejor encaje con el estudio nuevo de Clancy.</p></div></div>
         <div class="process-item reveal"><span class="idx">05</span><div><h4>El ganador vuelve</h4><p>Graba su videoclip y otra canción, gratis, en el estudio nuevo, en 2027.</p></div></div>
@@ -1174,12 +1220,12 @@
     <div class="offer-card reveal" id="pasoPago">
       <span class="kicker">Paso 1 — Paga tu reserva</span>
       <div class="payment-breakdown" style="margin-top:2rem; border-top:0; padding-top:0;">
-        <div class="pay-item"><div class="amount">$30.000</div><div class="label">Reserva (hoy)</div></div>
-        <div class="pay-item"><div class="amount">$350.000</div><div class="label" style="color:var(--yellow);">Saldo en el estudio, el día de la sesión</div></div>
-        <div class="pay-item"><div class="amount">$380.000</div><div class="label">Total</div></div>
+        <div class="pay-item"><div class="amount">$40.000</div><div class="label">Reserva (hoy)</div></div>
+        <div class="pay-item"><div class="amount">$380.000</div><div class="label" style="color:var(--yellow);">Saldo en el estudio, el día de la sesión</div></div>
+        <div class="pay-item"><div class="amount">$420.000</div><div class="label">Total</div></div>
       </div>
       <a id="wompiBtn" href="#" class="btn btn-solid" target="_blank" rel="noopener" aria-disabled="true" style="margin-top:2rem;">Pagar reserva con Wompi</a>
-      <p class="form-note">En línea solo pagas los $30.000 de la reserva, en el sitio seguro de Wompi; el saldo de $350.000 lo pagas en el estudio el día de tu sesión, en efectivo, por transferencia o con llave. Usa el mismo correo de tu inscripción para que podamos identificar tu reserva. <strong>Los $30.000 no son reembolsables</strong>; puedes reprogramar con al menos <strong>48 horas de anticipación</strong>.</p>
+      <p class="form-note">En línea solo pagas los $40.000 de la reserva, en el sitio seguro de Wompi; el saldo de $380.000 lo pagas en el estudio el día de tu sesión, en efectivo, por transferencia o con llave. Usa el mismo correo de tu inscripción para que podamos identificar tu reserva. <strong>Los $40.000 no son reembolsables</strong>; puedes reprogramar con al menos <strong>48 horas de anticipación</strong>.</p>
       <p class="form-note" style="color:var(--yellow);">Al terminar el pago, Wompi te trae de vuelta aquí para elegir tu fecha. Si no te redirige, <a href="https://wa.me/573197248697" target="_blank" rel="noopener" style="text-decoration:underline;">escríbenos por WhatsApp</a> y te enviamos el enlace.</p>
     </div>
 
@@ -1329,7 +1375,7 @@
     var m = raw.match(/playlist\/([A-Za-z0-9]+)/);
     var pid = m ? m[1] : raw;
     if(/^[A-Za-z0-9]{10,}$/.test(pid)){
-      sp.innerHTML = '<iframe title="Playlist de Spotify — Clancy Studios" src="https://open.spotify.com/embed/playlist/' + pid + '?utm_source=generator&theme=0" width="100%" height="352" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
+      sp.innerHTML = '<iframe title="Playlist de Spotify — Clancy Studios" src="https://open.spotify.com/embed/playlist/' + pid + '?utm_source=generator&theme=0" width="100%" height="620" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
     }
   }
 
