@@ -300,9 +300,17 @@
     backdrop-filter: blur(6px);
     border-bottom: 1px solid var(--line);
   }
+  /* Móvil/tablet: header limpio, sin barra negra ni degradado; solo logo y hamburguesa flotando */
+  @media (max-width: 1099px){
+    header.site-nav, header.site-nav.scrolled{
+      background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 0;
+    }
+    .nav-logo img{ filter: drop-shadow(0 2px 6px rgba(0,0,0,0.65)); }
+    .nav-toggle span{ box-shadow: 0 0 6px rgba(0,0,0,0.7); }
+  }
   .nav-row{ display:flex; align-items:center; justify-content: space-between; }
   .nav-logo{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; }
-  .nav-logo img{ height: 34px; width:auto; }
+  .nav-logo img{ height: 46px; width:auto; }
   .nav-logo span{ font-family: var(--f-label); font-weight:600; font-size:0.95rem; letter-spacing:0.05em; }
 
   nav.nav-links{ display:flex; gap:clamp(1rem, 1.6vw, 2rem); }
@@ -336,8 +344,10 @@
 
   .mobile-menu{
     position: fixed; inset:0; background: var(--bg); z-index: 999;
-    display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:1.6rem;
-    padding: 2rem var(--gutter);
+    display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start; gap:1.1rem;
+    height: 100vh; height: 100dvh;
+    overflow-y: auto; -webkit-overflow-scrolling: touch;
+    padding: 5.5rem var(--gutter) 2.5rem;
     transform: translateY(-105%);
     /* Cerrado: oculto del todo. En Chrome móvil la barra de direcciones cambia el alto
        del viewport y dejaba asomar el borde inferior del menú (botón "Agendar sesión") arriba. */
@@ -345,7 +355,7 @@
     transition: transform .45s var(--ease), visibility 0s linear .45s;
   }
   .mobile-menu.open{ transform: translateY(0); visibility: visible; pointer-events: auto; transition: transform .45s var(--ease), visibility 0s; }
-  .mobile-menu a{ font-family: var(--f-display); font-size: 2.4rem; text-decoration:none; color: var(--ink); }
+  .mobile-menu a{ font-family: var(--f-display); font-size: clamp(1.7rem, 7vw, 2.2rem); line-height:1.15; text-decoration:none; color: var(--ink); flex:none; }
   .mobile-menu a.btn{ margin-top:1rem; font-size:1rem; }
 
   /* ============ HERO ============ */
@@ -794,7 +804,7 @@
   <div class="wrap nav-row">
     <a href="#hero" class="nav-logo">
       <!-- REEMPLAZAR: si en el futuro usas una versión reducida del logo, cámbiala aquí -->
-      <img src="logo-clancy.png" alt="Clancy Studios">
+      <img src="Titulo-clancy.png" alt="Clancy Studios">
     </a>
     <nav class="nav-links" aria-label="Navegación principal">
       <a href="#sonido">Sonido</a>
