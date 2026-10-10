@@ -609,6 +609,15 @@
     background: linear-gradient(to top, rgba(5,5,5,0.85), transparent);
   }
   .work-card .info h4{ font-family: var(--f-label); font-weight:600; font-size:1rem; margin:0 0 0.2rem; }
+  .breakdown{ margin: 0 0 1.4rem; border: 1px solid var(--line-strong); background: rgba(5,5,5,0.3); }
+  .breakdown summary{ cursor:pointer; padding:0.9rem 1.2rem; font-family:var(--f-label); font-size:0.85rem; letter-spacing:0.05em; color:var(--yellow); list-style:none; display:flex; justify-content:space-between; gap:1rem; }
+  .breakdown summary::-webkit-details-marker{ display:none; }
+  .breakdown summary::after{ content:"+"; font-size:1.1rem; line-height:1; }
+  .breakdown[open] summary::after{ content:"–"; }
+  .bd-row{ display:flex; justify-content:space-between; gap:1rem; padding:0.65rem 1.2rem; border-top:1px solid var(--line); font-size:0.92rem; color:var(--ink); }
+  .bd-row b{ font-family:var(--f-label); font-weight:600; white-space:nowrap; }
+  .bd-total{ border-top:1px solid var(--line-strong); font-weight:600; }
+  .bd-promo{ color:var(--yellow); }
   .offer-note{ margin:1.8rem 0 0; padding:1rem 1.2rem; border-left:3px solid var(--yellow); background:rgba(5,5,5,0.35); font-size:0.95rem; color:var(--ink); }
   .offer-note strong{ color:var(--yellow); }
   .work-card .info span{ font-size:0.82rem; color: var(--muted); }
@@ -658,6 +667,8 @@
   @media (min-width:600px){ .offer-includes{ grid-template-columns: repeat(3,1fr); } }
   .offer-includes li{ list-style:none; font-size:0.92rem; color: var(--ink); display:flex; align-items:center; gap:0.6em; }
   .offer-includes li::before{ content:""; width:6px; height:6px; background: var(--red); flex:none; }
+  .offer-includes li.feat{ color: var(--yellow); font-weight:600; }
+  .offer-includes li.feat::before{ background: var(--yellow); }
 
   .payment-breakdown{
     display:flex; flex-wrap:wrap; gap: 1.5rem 3rem;
@@ -1086,17 +1097,30 @@
           <h3 style="margin-top:0.8rem;"><img src="pilotsessions.png" alt="Clancy Pilot Session" class="offer-title-img"></h3>
         </div>
         <div class="price-block">
-          <div class="price-old">Valor comercial: $550.000 COP</div>
+          <div class="price-old">Valor comercial: $1.200.000 COP</div>
           <div class="price-new">$420.000</div>
           <div class="price-label">precio de lanzamiento · COP</div>
         </div>
       </div>
 
       <ul class="offer-includes">
-        <li>Grabación 8 horas de estudio</li><li>Edición</li><li>Mezcla</li><li>Mastering</li>
+        <li class="feat">Ingeniero de sonido durante toda la sesión</li><li>Grabación 8 horas de estudio</li><li>Edición</li><li>Mezcla</li><li>Mastering</li>
         <li>Piano</li><li>Sintetizadores</li><li>Batería</li><li>Entrega del archivo final</li>
         <li>2 revisiones de mezcla</li><li>2 revisiones de mastering</li>
       </ul>
+
+      <details class="breakdown">
+        <summary>¿De dónde sale el valor comercial de $1.200.000?</summary>
+        <div class="bd-row"><span>Ingeniero de sonido durante toda la sesión</span><b>$120.000</b></div>
+        <div class="bd-row"><span>Grabación, 8 horas de estudio ($60.000 por hora)</span><b>$480.000</b></div>
+        <div class="bd-row"><span>Mezcla</span><b>$250.000</b></div>
+        <div class="bd-row"><span>Edición y afinación</span><b>$120.000</b></div>
+        <div class="bd-row"><span>Mastering</span><b>$120.000</b></div>
+        <div class="bd-row"><span>Uso de instrumentos (batería, piano y sintetizadores)</span><b>$60.000</b></div>
+        <div class="bd-row"><span>2 revisiones de mezcla y 2 de mastering</span><b>$50.000</b></div>
+        <div class="bd-row bd-total"><span>Valor comercial total</span><b>$1.200.000</b></div>
+        <div class="bd-row bd-promo"><span>Precio de lanzamiento Pilot Sessions</span><b>$420.000</b></div>
+      </details>
 
       <p class="offer-note"><strong>Importante:</strong> las Pilot Sessions <strong>no incluyen productor musical</strong>. El paquete cubre la grabación, edición, mezcla y mastering de tu canción; la producción musical (composición, beat y arreglos) no hace parte de esta oferta.</p>
 
