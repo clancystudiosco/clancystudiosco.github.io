@@ -310,7 +310,8 @@
   }
   .nav-row{ display:flex; align-items:center; justify-content: space-between; }
   .nav-logo{ display:flex; align-items:center; gap:0.7rem; text-decoration:none; }
-  .nav-logo img{ height: 46px; width:auto; }
+  .nav-logo img{ height: 28px; width:auto; }
+  @media (max-width: 1099px){ .nav-logo img{ height: 20px; } }
   .nav-logo span{ font-family: var(--f-label); font-weight:600; font-size:0.95rem; letter-spacing:0.05em; }
 
   nav.nav-links{ display:flex; gap:clamp(1rem, 1.6vw, 2rem); }
