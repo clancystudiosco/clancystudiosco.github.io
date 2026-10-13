@@ -794,6 +794,19 @@
   .pilot-cta{ margin-top:1.8rem; }
   .cupos-closed{ margin-top:1.8rem; font-family: var(--f-label); font-weight:600; color: var(--yellow); }
   .prize-title{ font-family: var(--f-display); font-size: clamp(1.8rem, 4vw, 2.8rem); }
+
+  /* ============ CONSENTIMIENTO Y AVISO DE PRIVACIDAD ============ */
+  .privacy-body{ padding: 0.4rem 1.2rem 1.2rem; border-top: 1px solid var(--line); font-size: 0.9rem; color: var(--ink); }
+  .privacy-body p{ margin: 0.8rem 0 0; max-width: 62ch; }
+  .field.consent label{
+    display:flex; align-items:flex-start; gap:0.8rem;
+    font-family: var(--f-body); font-size:0.9rem; letter-spacing:0; color: var(--ink); cursor:pointer;
+  }
+  .field.consent input[type="checkbox"]{
+    width:20px; height:20px; flex:none; margin:2px 0 0; padding:0;
+    border:1px solid var(--line-strong); accent-color: var(--red); cursor:pointer;
+  }
+  .field.consent a{ text-decoration: underline; text-underline-offset: 3px; color: var(--yellow); }
 </style>
 </head>
 <body>
@@ -1200,15 +1213,16 @@
       </div>
     </div>
 
-    <!-- FORMULARIO DE INSCRIPCIÓN
-         REEMPLAZAR: pega en data-endpoint la URL de tu servicio de formularios (Formspree, Getform, Google Apps Script, etc.).
-         Sin endpoint el formulario avisa que no está conectado y no pierde datos en silencio. -->
+    <!-- FORMULARIO DE INSCRIPCIÓN → Google Sheets
+         REEMPLAZAR: pega en data-endpoint la URL de la aplicación web de Google Apps Script (termina en /exec).
+         Las inscripciones llegan como filas a tu hoja de cálculo. Ver codigo-google-apps-script.gs.
+         Sin endpoint el formulario avisa que no está conectado y no simula éxito. -->
     <div id="aplicar" class="offer-card reveal" data-reserve-cta>
       <span class="kicker">Inscripción</span>
       <h2 class="h-section" style="margin-top:1rem; font-size: clamp(2rem, 5vw, 3.2rem);">Quiero ser parte de las Pilot Sessions.</h2>
       <p class="lede" style="margin-top:1.2rem;">Cuéntanos sobre tu proyecto y envíanos el guion de tu videoclip. Tu cupo queda confirmado cuando pagas la reserva.</p>
 
-      <form class="form-grid" id="pilotForm" action="#" method="post" data-endpoint="">
+      <form class="form-grid" id="pilotForm" action="#" method="post" data-endpoint="https://script.google.com/macros/s/AKfycbxPaaxQRbKwHJQV3S_e7eG1_sbgG788FyQrqpdo6dpmmwTNb2XdpJqV1m0dYg7M7Wg/exec">
         <div class="field"><label for="artista">Nombre del artista / grupo / proyecto</label><input id="artista" name="artista" type="text" required></div>
         <div class="field"><label for="responsable">Nombre del responsable</label><input id="responsable" name="responsable" type="text" required></div>
         <div class="field"><label for="whatsapp">WhatsApp</label><input id="whatsapp" name="whatsapp" type="tel" required></div>
@@ -1224,12 +1238,42 @@
         <div class="field"><label for="snack">Snack favorito</label><input id="snack" name="snack" type="text"></div>
         <div class="field"><label for="bebida">Bebida favorita</label><input id="bebida" name="bebida" type="text"></div>
 
+        <!-- Trampa anti-spam: debe quedar vacía. Las personas no la ven; los bots sí la llenan -->
+        <div class="visually-hidden" aria-hidden="true">
+          <label for="website">No llenar este campo</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" value="">
+        </div>
+
+        <div class="field full">
+          <details class="breakdown" id="privacidad">
+            <summary>Aviso de privacidad</summary>
+            <div class="privacy-body">
+              <p><strong>Responsable:</strong> Clancy Studios, Usaquén, Bogotá, D.C. Contacto: contacto@clancystudiosco.com · WhatsApp +57 319 724 8697.</p>
+              <p><strong>Datos que recogemos en este formulario:</strong> nombre del artista o proyecto, nombre del responsable, WhatsApp, correo, Instagram, género musical, canción, enlace del guion, referencias, objetivo de la sesión, participantes y sus funciones, y tus preferencias de snack y bebida. No pedimos datos sensibles. Si inscribes a otras personas, declaras que tienes su autorización.</p>
+              <p><strong>Para qué los usamos:</strong> gestionar tu inscripción y tu sesión, contactarte por WhatsApp o correo, gestionar cobros y comprobantes, recibir y evaluar tu guion para el premio, atender tus solicitudes e informarte sobre próximas sesiones y novedades de Clancy (puedes pedir que no te escribamos más en cualquier momento). No vendemos tus datos ni los usamos para otras finalidades sin tu autorización, salvo que la ley lo exija.</p>
+              <p><strong>Dónde se guardan y quién los trata:</strong> los datos de este formulario llegan a una hoja de cálculo y a un correo de Google a los que solo accede el equipo de Clancy. Para prestar el servicio también usamos Wompi (pagos), Cal.com (agenda) y WhatsApp. Algunos de estos proveedores pueden guardar información en servidores fuera de Colombia.</p>
+              <p><strong>Cuánto tiempo:</strong> mientras dure tu relación con Clancy y el tiempo necesario para cumplir obligaciones legales, contables y tributarias. Los guiones no elegidos se dejan de conservar cuando termina la selección del premio.</p>
+              <p><strong>Menores de edad:</strong> solo tratamos datos de menores de 18 años con autorización de su madre, padre o representante legal.</p>
+              <p><strong>Tus derechos:</strong> conocer, actualizar y rectificar tus datos; pedir prueba de tu autorización; ser informado del uso que se les ha dado; acceder a ellos gratis; revocar la autorización y pedir la supresión cuando no exista un deber legal o contractual de conservarlos; y presentar quejas ante la Superintendencia de Industria y Comercio (SIC). Escríbenos al correo o WhatsApp de contacto: respondemos consultas en máximo 10 días hábiles y reclamos en máximo 15 días hábiles. Ley 1581 de 2012.</p>
+              <p>Consulta la <a href="Clancy_Studiosco_Politica_de_Tratamiento_de_Datos.pdf" target="_blank" rel="noopener" style="text-decoration:underline; color:var(--yellow);">Política de Tratamiento de Datos Personales completa</a>.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="field full consent">
+          <label for="consentimiento">
+            <input id="consentimiento" name="consentimiento" type="checkbox" value="Sí" required>
+            <span>Autorizo a Clancy Studios para tratar mis datos personales (y los de las personas que inscribo, de quienes tengo autorización) para gestionar mi inscripción, reserva y sesión, comunicarse conmigo y las demás finalidades de su <a href="#privacidad" class="js-open-privacy">aviso de privacidad</a> y su Política de Tratamiento de Datos Personales. Conozco mis derechos y cómo ejercerlos. Acepto los <a href="Clancy_Studiosco_Terminos_y_Condiciones_Pilot_Sessions.pdf" target="_blank" rel="noopener">Términos y Condiciones</a> de las Pilot Sessions.</span>
+          </label>
+        </div>
+
         <div class="form-actions field full">
           <button type="submit" class="btn btn-solid">Enviar mi inscripción</button>
         </div>
       </form>
       <p class="form-msg" id="pilotMsg" role="status" hidden></p>
-      <p class="form-note" style="color:var(--yellow);">Después de enviar el formulario, reserva tu cupo en la sección de reservas para confirmarlo.</p>
+      <div class="pilot-cta" id="pilotNext" hidden><a href="#reservar" class="btn btn-solid">Reservar mi cupo</a></div>
+      <p class="form-note" style="color:var(--yellow);">Después de enviar el formulario, <a href="#reservar" style="text-decoration:underline;">reserva tu cupo en la sección de reservas</a> para confirmarlo.</p>
     </div>
 
     <!--
@@ -1475,30 +1519,57 @@
     }
   }
 
-  // Formulario de inscripción: envía a data-endpoint; si no está configurado, lo avisa en lugar de simular éxito
+  // Formulario de inscripción: envía los datos a Google Apps Script (data-endpoint) y deja las respuestas en Google Sheets.
+  // Apps Script no devuelve cabeceras CORS, así que se envía en modo no-cors: el navegador no puede leer la respuesta,
+  // por eso solo se muestra error si falla la conexión. Si el endpoint no está configurado, lo avisa en lugar de simular éxito.
   var form = document.getElementById('pilotForm');
   if(form){
-    form.addEventListener('submit', function(ev){
-      ev.preventDefault();
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
       var msg = document.getElementById('pilotMsg');
+      var next = document.getElementById('pilotNext');
+      var btn = form.querySelector('button[type=submit]');
+      var textoOriginal = btn.textContent;
       var endpoint = (form.getAttribute('data-endpoint') || '').trim();
+      if(next){ next.hidden = true; }
       if(!/^https:\/\//.test(endpoint)){
         msg.textContent = 'El formulario aún no está conectado. Escríbenos por WhatsApp para inscribirte.';
         msg.hidden = false;
         return;
       }
-      var btn = form.querySelector('button[type=submit]');
+      // Anti-spam: si el campo trampa viene lleno, se descarta sin avisar
+      if(form.elements['website'] && form.elements['website'].value){ return; }
       btn.disabled = true;
-      fetch(endpoint, { method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(form) })
-        .then(function(r){
-          if(!r.ok){ throw new Error('envio'); }
-          msg.textContent = 'Recibimos tu inscripción y tu guion. Ahora reserva tu cupo más abajo para confirmarlo.';
+      btn.textContent = 'Guardando inscripción...';
+      var data = new URLSearchParams(new FormData(form));
+      fetch(endpoint, { method: 'POST', mode: 'no-cors', body: data })
+        .then(function(){
           form.reset();
+          msg.textContent = 'Recibimos tu inscripción y tu guion. Ahora reserva tu cupo para confirmarlo.';
+          msg.hidden = false;
+          if(next){ next.hidden = false; }
+          alert('¡Inscripción guardada con éxito en Clancy Studios!');
         })
         .catch(function(){
-          msg.textContent = 'No pudimos enviar el formulario. Inténtalo de nuevo o escríbenos por WhatsApp.';
+          msg.textContent = 'No pudimos enviar el formulario. Revisa tu conexión e inténtalo de nuevo, o escríbenos por WhatsApp.';
+          msg.hidden = false;
+          alert('No pudimos guardar tu inscripción. Revisa tu conexión a internet e inténtalo de nuevo, o escríbenos por WhatsApp.');
         })
-        .then(function(){ msg.hidden = false; btn.disabled = false; });
+        .then(function(){
+          btn.disabled = false;
+          btn.textContent = textoOriginal;
+        });
+    });
+  }
+
+  // El enlace "aviso de privacidad" abre el desplegable y lo muestra
+  var pl = document.querySelector('.js-open-privacy');
+  var pd = document.getElementById('privacidad');
+  if(pl && pd){
+    pl.addEventListener('click', function(ev){
+      ev.preventDefault();
+      pd.open = true;
+      pd.scrollIntoView({ block: 'center' });
     });
   }
 })();
