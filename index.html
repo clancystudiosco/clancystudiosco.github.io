@@ -64,10 +64,10 @@
      FONDO PRINCIPAL — FONDOWEB.webp
      La imagen (rojo / amarillo / negro, textura grunge tipo fuego) es el
      fondo fijo de toda la página. Para que se sienta viva sin usar un GIF
-     pesado, se anima suavemente su background-position (deriva orgánica) y
+     pesado, se anima suavemente su posición y zoom (deriva orgánica) y
      se le superpone una capa de grano cinematográfico que vibra en bucle.
      REEMPLAZAR: si el archivo cambia de nombre, actualizar 'FONDOWEB.webp'
-     en la regla `body` de abajo — es la única referencia en todo el CSS.
+     en la regla `.bg-layer` de abajo — es la única referencia en todo el CSS.
      ====================================================================== */
   body{
     margin:0;
@@ -81,40 +81,40 @@
   }
 
   /* Capa de fondo fija. Se usa un elemento con position:fixed en lugar de
-     background-attachment:fixed porque iPhone/iPad (Safari) ignora esa propiedad:
-     estiraba la imagen sobre toda la página y el fondo se veía quieto y deformado.
-     Es un poco más grande que la pantalla (110%) para que la deriva no deje bordes. */
+     background-attachment:fixed porque iPhone/iPad (Safari) ignora esa propiedad.
+     Mide 120% del viewport (offset -10%) para que la deriva y el zoom no dejen bordes visibles,
+     incluso en pantallas grandes de PC. */
   .bg-layer{
     position: fixed;
-    top:-5%; left:-5%;
-    width:110%; height:110%;
+    top:-10%; left:-10%;
+    width:120%; height:120%;
     z-index:-2;
     pointer-events:none;
     background: #8c0b0b url('FONDOWEB.webp') center / cover no-repeat;
     will-change: transform;
-    animation: bgDrift 26s ease-in-out infinite alternate;
+    animation: bgDrift 22s ease-in-out infinite alternate;
   }
 
-  /* Deriva orgánica: mueve muy ligeramente el encuadre del fondo, como si respirara.
-     Usa transform (más fluido que animar background-position, sobre todo en celulares). */
+  /* Deriva orgánica con desplazamiento amplio y ligero zoom, para que el movimiento
+     se note también en monitores grandes. Usa transform (más fluido que background-position). */
   @keyframes bgDrift{
-    0%   { transform: translate3d(-1.5%, -1.5%, 0); }
-    25%  { transform: translate3d(1.5%, 0.5%, 0); }
-    50%  { transform: translate3d(0, 2%, 0); }
-    75%  { transform: translate3d(-2%, 0, 0); }
-    100% { transform: translate3d(0.5%, -1%, 0); }
+    0%   { transform: translate3d(-4%, -3%, 0) scale(1.00); }
+    25%  { transform: translate3d(3%, 1%, 0)   scale(1.06); }
+    50%  { transform: translate3d(1%, 4%, 0)   scale(1.10); }
+    75%  { transform: translate3d(-3%, 2%, 0)  scale(1.05); }
+    100% { transform: translate3d(2%, -3%, 0)  scale(1.02); }
   }
 
   /* Oscurece de forma pareja para que el texto sea legible sobre cualquier zona de la textura,
-     sin tapar el fondo: se queda por debajo de todo el contenido (z-index -1) pero encima del
-     background-image del body (que no tiene z-index propio, así que esto siempre queda visualmente arriba). */
+     sin tapar el fondo: se queda por debajo de todo el contenido (z-index -1) pero encima de .bg-layer.
+     Opacidades reducidas para que el movimiento del fondo se vea mejor. */
   body::before{
     content:"";
     position: fixed;
     inset: 0;
     z-index: -1;
-    background: radial-gradient(ellipse 75% 55% at 50% 0%, rgba(5,5,5,0.18) 0%, rgba(5,5,5,0.48) 70%),
-                linear-gradient(180deg, rgba(5,5,5,0.22) 0%, rgba(5,5,5,0.36) 45%, rgba(5,5,5,0.5) 100%);
+    background: radial-gradient(ellipse 75% 55% at 50% 0%, rgba(5,5,5,0.10) 0%, rgba(5,5,5,0.38) 70%),
+                linear-gradient(180deg, rgba(5,5,5,0.14) 0%, rgba(5,5,5,0.28) 45%, rgba(5,5,5,0.42) 100%);
     pointer-events: none;
   }
 
