@@ -15,10 +15,12 @@
 <meta property="og:url" content="https://clancystudiosco.com">
 
 <!-- FAVICON: reemplazar por el ícono real del estudio -->
-<link rel="icon" type="image/png" href="logo-clancy.png">
+<link rel="icon" type="image/png" href="logo-clancy-192.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="FONDOWEB.webp" fetchpriority="high">
+<link rel="preload" as="image" href="Titulo-clancy.webp" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
@@ -59,12 +61,12 @@
   }
 
   /* ======================================================================
-     FONDO PRINCIPAL — FONDOWEB.png
+     FONDO PRINCIPAL — FONDOWEB.webp
      La imagen (rojo / amarillo / negro, textura grunge tipo fuego) es el
      fondo fijo de toda la página. Para que se sienta viva sin usar un GIF
      pesado, se anima suavemente su background-position (deriva orgánica) y
      se le superpone una capa de grano cinematográfico que vibra en bucle.
-     REEMPLAZAR: si el archivo cambia de nombre, actualizar 'FONDOWEB.png'
+     REEMPLAZAR: si el archivo cambia de nombre, actualizar 'FONDOWEB.webp'
      en la regla `body` de abajo — es la única referencia en todo el CSS.
      ====================================================================== */
   body{
@@ -76,22 +78,31 @@
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     position: relative;
+  }
 
-    background-image: url('FONDOWEB.png');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+  /* Capa de fondo fija. Se usa un elemento con position:fixed en lugar de
+     background-attachment:fixed porque iPhone/iPad (Safari) ignora esa propiedad:
+     estiraba la imagen sobre toda la página y el fondo se veía quieto y deformado.
+     Es un poco más grande que la pantalla (110%) para que la deriva no deje bordes. */
+  .bg-layer{
+    position: fixed;
+    top:-5%; left:-5%;
+    width:110%; height:110%;
+    z-index:-2;
+    pointer-events:none;
+    background: #8c0b0b url('FONDOWEB.webp') center / cover no-repeat;
+    will-change: transform;
     animation: bgDrift 26s ease-in-out infinite alternate;
   }
 
-  /* Deriva orgánica: mueve muy ligeramente el encuadre del fondo, como si respirara */
+  /* Deriva orgánica: mueve muy ligeramente el encuadre del fondo, como si respirara.
+     Usa transform (más fluido que animar background-position, sobre todo en celulares). */
   @keyframes bgDrift{
-    0%   { background-position: 48% 46%; }
-    25%  { background-position: 52% 50%; }
-    50%  { background-position: 50% 54%; }
-    75%  { background-position: 46% 50%; }
-    100% { background-position: 50% 48%; }
+    0%   { transform: translate3d(-1.5%, -1.5%, 0); }
+    25%  { transform: translate3d(1.5%, 0.5%, 0); }
+    50%  { transform: translate3d(0, 2%, 0); }
+    75%  { transform: translate3d(-2%, 0, 0); }
+    100% { transform: translate3d(0.5%, -1%, 0); }
   }
 
   /* Oscurece de forma pareja para que el texto sea legible sobre cualquier zona de la textura,
@@ -128,7 +139,7 @@
     100% { transform: translate(0,0); }
   }
   @media (prefers-reduced-motion: reduce){
-    body{ animation: none; }
+    .bg-layer{ animation: none; }
     body::after{ animation: none; opacity: 0.3; }
   }
 
@@ -828,6 +839,7 @@
 </style>
 </head>
 <body>
+<div class="bg-layer" aria-hidden="true"></div>
 
 <canvas id="grain" aria-hidden="true"></canvas>
 
@@ -836,7 +848,7 @@
   <div class="wrap nav-row">
     <a href="#hero" class="nav-logo">
       <!-- REEMPLAZAR: si en el futuro usas una versión reducida del logo, cámbiala aquí -->
-      <img src="Titulo-clancy2.png" alt="Clancy Studios">
+      <img src="Titulo-clancy2.webp" alt="Clancy Studios" width="300" height="143">
     </a>
     <nav class="nav-links" aria-label="Navegación principal">
       <a href="#sonido">Sonido</a>
@@ -872,8 +884,8 @@
 <!-- ============ 1. HERO ============ -->
 <section class="hero" id="hero">
   <div class="wrap">
-    <!-- REEMPLAZAR: Titulo-clancy.png — imagen del título sin fondo (reemplaza al logo + texto CLANCY STUDIOS / Más que un estudio.) -->
-    <img src="Titulo-clancy.png" alt="Clancy Studios — Más que un estudio" class="hero-title-img">
+    <!-- REEMPLAZAR: Titulo-clancy.webp — imagen del título sin fondo (reemplaza al logo + texto CLANCY STUDIOS / Más que un estudio.) -->
+    <img src="Titulo-clancy.webp" alt="Clancy Studios — Más que un estudio" class="hero-title-img" width="1120" height="1120" fetchpriority="high" decoding="async">
     <p class="desc">Estudio de grabación, producción, mezcla y mastering en Usaquén, Bogotá.</p>
     <div class="hero-actions">
       <!-- REEMPLAZAR AQUÍ CON EL ENLACE REAL DE WHATSAPP -->
@@ -892,13 +904,13 @@
   <div class="wrap split split-welcome">
     <div class="reveal">
       <span class="kicker">Quiénes somos</span>
-      <img src="Bienvenida.png" alt="Bienvenido a Clancy" class="bienvenida-title-img" style="margin-top:1rem;">
+      <img src="Bienvenida.webp" alt="Bienvenido a Clancy" width="1040" height="520" loading="lazy" decoding="async" class="bienvenida-title-img" style="margin-top:1rem;">
       <p class="lede" style="margin-top:1.6rem;">Clancy nace de la idea de que hacer música debería sentirse como entrar a un lugar donde realmente puedes concentrarte en crear.</p>
       <p class="quote-block reveal">No es solo un espacio con micrófonos. Es un lugar pensado para que una idea se convierta en canción, con alguien acompañándote en cada paso.</p>
     </div>
     <div class="reveal">
       <div class="video-frame">
-        <iframe src="https://www.youtube.com/embed/3HHxqF_9vjA" title="Bienvenido a Clancy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe loading="lazy" src="https://www.youtube.com/embed/3HHxqF_9vjA" title="Bienvenido a Clancy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
     </div>
   </div>
@@ -995,7 +1007,7 @@
         <div class="video-frame">
           <!-- EQUIPAMIENTO EMBED: REEMPLAZAR AQUÍ CON EL IFRAME REAL DE YOUTUBE/VIMEO -->
           <!--
-          <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="Presentación de equipos — Clancy Studios" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe loading="lazy" src="https://www.youtube.com/embed/VIDEO_ID" title="Presentación de equipos — Clancy Studios" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           -->
           <div class="video-placeholder">
             <div class="play-dot"></div>
@@ -1095,25 +1107,25 @@
     <div class="work-grid">
       <!-- Cada tarjeta enlaza al Instagram del artista o productor -->
       <a class="work-card reveal" href="https://www.instagram.com/eleonoxx__/" target="_blank" rel="noopener" aria-label="Eleonoxx — abrir perfil">
-        <img src="Eleonoxx.jpg" alt="Eleonoxx" class="photo">
+        <img src="Eleonoxx.webp" alt="Eleonoxx" class="photo" width="800" height="1416" loading="lazy" decoding="async">
         <div class="shade"></div>
         <span class="go" aria-hidden="true">↗</span>
         <div class="info"><h4>Eleonoxx</h4><span>Artista — Trap / Urbano</span></div>
       </a>
       <a class="work-card reveal" href="https://www.instagram.com/kalido/" target="_blank" rel="noopener" aria-label="Kalido — abrir perfil">
-        <img src="Kalido.jpg" alt="Kalido" class="photo">
+        <img src="Kalido.webp" alt="Kalido" class="photo" width="387" height="516" loading="lazy" decoding="async">
         <div class="shade"></div>
         <span class="go" aria-hidden="true">↗</span>
         <div class="info"><h4>Kalido</h4><span>Artista — Urbano</span></div>
       </a>
       <a class="work-card reveal" href="https://www.instagram.com/luaxx.beats/" target="_blank" rel="noopener" aria-label="Luaxx — abrir perfil">
-        <img src="Luaxx.jpg" alt="Luaxx" class="photo">
+        <img src="Luaxx.webp" alt="Luaxx" class="photo" width="800" height="1201" loading="lazy" decoding="async">
         <div class="shade"></div>
         <span class="go" aria-hidden="true">↗</span>
         <div class="info"><h4>Luaxx</h4><span>Productor — Todo terreno</span></div>
       </a>
       <a class="work-card reveal" href="https://www.instagram.com/prodsanty/" target="_blank" rel="noopener" aria-label="Xanty — abrir perfil">
-        <img src="Xanty.jpg" alt="Xanty" class="photo">
+        <img src="Xanty.webp" alt="Xanty" class="photo" width="800" height="1067" loading="lazy" decoding="async">
         <div class="shade"></div>
         <span class="go" aria-hidden="true">↗</span>
         <div class="info"><h4>Xanty</h4><span>Productor — Urbano</span></div>
@@ -1128,7 +1140,7 @@
 <section class="section pilot-section" id="pilot" data-cupos-total="10" data-cupos-taken="0">
   <div class="wrap">
     <span class="pilot-badge">Noviembre · 10 cupos</span>
-    <img src="clancypiloto.png" alt="Clancy Pilot Sessions" class="pilot-title-img">
+    <img src="clancypiloto.webp" alt="Clancy Pilot Sessions" class="pilot-title-img" width="1100" height="550" loading="lazy" decoding="async">
     <p class="pilot-sub">Los primeros 10 proyectos de Clancy.</p>
     <p class="lede" style="margin-top:1.6rem; max-width:56ch;">Abrimos 10 cupos para grabar tu canción en noviembre. Todos incluyen la canción grabada, mezclada y masterizada. Además, un solo proyecto ganará un premio: un videoclip y otra canción grabada sin costo, ambos en el estudio nuevo de Clancy, en 2027. El ganador se elige por el guion de su videoclip, que es opcional.</p>
 
@@ -1145,7 +1157,7 @@
       <div class="offer-head">
         <div>
           <span class="kicker">La oferta</span>
-          <h3 style="margin-top:0.8rem;"><img src="pilotsessions.png" alt="Clancy Pilot Session" class="offer-title-img"></h3>
+          <h3 style="margin-top:0.8rem;"><img src="pilotsessions.webp" alt="Clancy Pilot Session" class="offer-title-img" width="720" height="240" loading="lazy" decoding="async"></h3>
         </div>
         <div class="price-block">
           <div class="price-old">Valor comercial: $1.200.000 COP</div>
@@ -1378,7 +1390,7 @@
   <div class="wrap">
     <div class="footer-top">
       <div class="footer-brand">
-        <img src="logo-clancy.png" alt="Clancy Studios">
+        <img src="logo-clancy.webp" alt="Clancy Studios" width="120" height="120" loading="lazy" decoding="async">
         <div>
           <div class="txt">CLANCY STUDIOS</div>
           <div class="tag">Más que un estudio.</div>
