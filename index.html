@@ -157,8 +157,21 @@
     100% { transform: translate(0,0); }
   }
   @media (prefers-reduced-motion: reduce){
-    .bg-layer{ animation: none !important; translate: none; transition: none; }
+    /* Si el sistema pide "reducir movimiento" (en Windows suele venir así sin que el usuario lo sepa),
+       el fondo NO se congela: se queda con una deriva lenta y suave, sin zoom ni rotación.
+       Los !important son necesarios para ganarle a la regla global de arriba que apaga todas las animaciones. */
+    .bg-layer{
+      animation: bgDriftSoft 24s ease-in-out infinite alternate !important;
+      animation-duration: 24s !important;
+      animation-iteration-count: infinite !important;
+      translate: none; transition: none;
+    }
     body::after{ animation: none; opacity: 0.3; }
+  }
+  @keyframes bgDriftSoft{
+    0%   { transform: translate3d(-5%, -4%, 0) scale(1.06); }
+    50%  { transform: translate3d(3%, 5%, 0)   scale(1.06); }
+    100% { transform: translate3d(5%, -4%, 0)  scale(1.06); }
   }
 
   img{ max-width:100%; display:block; }
