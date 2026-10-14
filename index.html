@@ -105,6 +105,24 @@
     100% { transform: translate3d(2%, -3%, 0)  scale(1.02); }
   }
 
+  /* PC (pantalla grande): movimiento más amplio y más rápido, porque en monitores grandes
+     la misma deriva se percibe mucho más lenta. Además el fondo reacciona al mouse y al scroll
+     usando la propiedad independiente `translate` (no choca con la animación de `transform`). */
+  .bg-layer{
+    translate: var(--bg-px, 0px) var(--bg-py, 0px);
+    transition: translate .9s cubic-bezier(.22,.61,.36,1);
+  }
+  @media (min-width: 1100px){
+    .bg-layer{ animation: bgDriftPC 14s ease-in-out infinite alternate; }
+  }
+  @keyframes bgDriftPC{
+    0%   { transform: translate3d(-6%, -5%, 0) scale(1.00) rotate(0deg); }
+    25%  { transform: translate3d(5%, 2%, 0)   scale(1.10) rotate(0.6deg); }
+    50%  { transform: translate3d(2%, 6%, 0)   scale(1.18) rotate(-0.4deg); }
+    75%  { transform: translate3d(-5%, 3%, 0)  scale(1.09) rotate(0.5deg); }
+    100% { transform: translate3d(4%, -5%, 0)  scale(1.03) rotate(0deg); }
+  }
+
   /* Oscurece de forma pareja para que el texto sea legible sobre cualquier zona de la textura,
      sin tapar el fondo: se queda por debajo de todo el contenido (z-index -1) pero encima de .bg-layer.
      Opacidades reducidas para que el movimiento del fondo se vea mejor. */
@@ -139,7 +157,7 @@
     100% { transform: translate(0,0); }
   }
   @media (prefers-reduced-motion: reduce){
-    .bg-layer{ animation: none; }
+    .bg-layer{ animation: none !important; translate: none; transition: none; }
     body::after{ animation: none; opacity: 0.3; }
   }
 
@@ -1472,6 +1490,25 @@
     document.querySelectorAll('.reveal, .reveal-line').forEach(function(el){ io.observe(el); });
   } else {
     document.querySelectorAll('.reveal, .reveal-line').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // Parallax del fondo en PC: sigue al mouse y se desplaza un poco con el scroll
+  var bgLayer = document.querySelector('.bg-layer');
+  if(bgLayer && !reduceMotion && window.matchMedia('(min-width:1100px) and (pointer:fine)').matches){
+    var mx = 0, my = 0, ticking = false;
+    function applyBg(){
+      ticking = false;
+      var sy = Math.min(window.scrollY * 0.04, 60);
+      bgLayer.style.setProperty('--bg-px', (mx * -40).toFixed(1) + 'px');
+      bgLayer.style.setProperty('--bg-py', (my * -30 - sy).toFixed(1) + 'px');
+    }
+    function queueBg(){ if(!ticking){ ticking = true; requestAnimationFrame(applyBg); } }
+    window.addEventListener('mousemove', function(e){
+      mx = (e.clientX / window.innerWidth) - 0.5;
+      my = (e.clientY / window.innerHeight) - 0.5;
+      queueBg();
+    }, { passive: true });
+    window.addEventListener('scroll', queueBg, { passive: true });
   }
 
   // Subtle grain canvas
