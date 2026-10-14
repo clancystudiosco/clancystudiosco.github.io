@@ -527,7 +527,8 @@
   @media (min-width: 900px){
     .split-welcome{ grid-template-columns: 0.72fr 1.28fr; gap: 3.5rem; align-items: center; }
   }
-  @media (min-width: 1200px){ #bienvenido > .wrap{ max-width: 1360px; } }
+  /* Mismo ancho de contenido que "Quiénes somos" en todas las secciones (solo escritorio; en móvil no cambia) */
+  @media (min-width: 1200px){ .wrap{ max-width: 1360px; } }
   #bienvenido .video-frame{ width:100%; box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
   .video-frame{
     position: relative;
