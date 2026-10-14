@@ -527,8 +527,7 @@
   @media (min-width: 900px){
     .split-welcome{ grid-template-columns: 0.72fr 1.28fr; gap: 3.5rem; align-items: center; }
   }
-  /* Mismo ancho de contenido que "Quiénes somos" en todas las secciones (solo escritorio; en móvil no cambia) */
-  @media (min-width: 1200px){ .wrap{ max-width: 1360px; } }
+  @media (min-width: 1200px){ #bienvenido > .wrap{ max-width: 1360px; } }
   #bienvenido .video-frame{ width:100%; box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
   .video-frame{
     position: relative;
@@ -1400,10 +1399,14 @@
 </section>
 
 <!-- ============ 10. RESERVAS (Wompi + Cal.com) ============ -->
-<!-- REEMPLAZAR: data-wompi-url = enlace de pago de Wompi (ej. https://checkout.wompi.co/l/XXXXXX).
-                 En Wompi configura la URL de redirección después del pago como: https://clancystudiosco.com/#fecha
-                 data-cal-link = tu página de reservas de Cal.com (ej. https://cal.com/clancystudios/pilot-session o solo clancystudios/pilot-session) -->
-<section class="section" id="reservar" data-wompi-url="" data-cal-link="">
+<!-- REEMPLAZAR:
+                 data-wompi-url = enlace de pago de Wompi (ej. https://checkout.wompi.co/l/XXXXXX).
+                 En Wompi configura la URL de redirección después del pago como: https://clancystudiosco.com/   (SIN #fecha:
+                 Wompi agrega ?id=... y la página se encarga de abrir la agenda).
+                 data-cal-link = tu página de reservas de Cal.com (ej. https://cal.com/clancystudios/pilot-session o solo clancystudios/pilot-session)
+                 data-pagos-endpoint = URL /exec del Apps Script de clancy-pagos.gs. SIN ESTE DATO LA AGENDA NUNCA SE ABRE (a propósito:
+                 la agenda solo se muestra si el pago se verifica). No publiques el enlace de Cal.com en otros sitios. -->
+<section class="section" id="reservar" data-wompi-url="" data-cal-link="clancy-studios-co/pilot-sessions" data-pagos-endpoint="">
   <div class="wrap">
     <span class="kicker">Reservas</span>
     <h2 class="h-section" style="margin-top:1rem;">Reserva tu sesión.</h2>
@@ -1422,7 +1425,9 @@
       <p class="form-note" style="color:var(--yellow);">Al terminar el pago, Wompi te trae de vuelta aquí para elegir tu fecha. Si no te redirige, <a href="https://wa.me/573197248697" target="_blank" rel="noopener" style="text-decoration:underline;">escríbenos por WhatsApp</a> y te enviamos el enlace.</p>
     </div>
 
-    <!-- Paso 2: solo aparece cuando Wompi redirige a #fecha -->
+    <p class="form-note" id="pagoEstado" role="status" aria-live="polite" style="color:var(--yellow);margin-top:1.5rem;" hidden></p>
+
+    <!-- Paso 2: solo aparece cuando el pago de Wompi se verifica (ver JS de Reservas) -->
     <div class="offer-card reveal" id="fecha" hidden>
       <span class="kicker">Paso 2 — Elige tu fecha</span>
       <p class="lede" style="margin-top:1.2rem;">Elige tu día de noviembre. Las fechas ocupadas ya no aparecen.</p>
@@ -1591,7 +1596,20 @@
     }
   }
 
-  // Reservas: pago en Wompi (paso 1) y agenda de Cal.com (paso 2, se abre al volver del pago en #fecha o con el botón)
+  // Reservas: pago en Wompi (paso 1) y agenda de Cal.com (paso 2).
+  // El paso 2 SOLO se abre si el pago se verifica: Wompi redirige con ?id=<transacción>, el Apps Script
+  // (data-pagos-endpoint) confirma con Wompi que está aprobada y la canjea UNA sola vez, y devuelve un token
+  // que se guarda en este navegador para poder volver a abrir la agenda sin volver a canjear.
+  var PAGO_KEY = 'clancy_reserva';
+  var pagoId = '';
+  var pagoGuardado = null;
+  var qm = location.search.match(/[?&]id=([0-9A-Za-z-]{5,64})(?:&|$)/);
+  if(qm){ pagoId = qm[1]; }
+  try {
+    var sv = JSON.parse(localStorage.getItem(PAGO_KEY) || 'null');
+    if(sv && typeof sv.id === 'string' && typeof sv.token === 'string'){ pagoGuardado = sv; }
+  } catch(e){}
+
   var res = document.getElementById('reservar');
   if(res){
     var wu = (res.getAttribute('data-wompi-url') || '').trim();
@@ -1603,7 +1621,7 @@
     var cm = calRaw.match(/^(?:https:\/\/(?:app\.)?cal\.com\/)?([A-Za-z0-9._-]+\/[A-Za-z0-9._\/-]+)$/);
     var fcard = document.getElementById('fecha');
     var cf = document.getElementById('calFrame');
-    var showFecha = function(){
+    var showFecha = function(noScroll){
       if(!fcard || !cf){ return; }
       fcard.hidden = false;
       fcard.classList.add('in');
@@ -1616,10 +1634,112 @@
           cf.innerHTML = '<div class="video-placeholder" style="padding:3rem 1rem;">Agenda de fechas — próximamente</div>';
         }
       }
-      fcard.scrollIntoView();
+      if(!noScroll){ fcard.scrollIntoView(); }
     };
-    if(location.hash === '#fecha'){ showFecha(); }
-    window.addEventListener('hashchange', function(){ if(location.hash === '#fecha'){ showFecha(); } });
+
+    var estado = document.getElementById('pagoEstado');
+    var setEstado = function(html){
+      if(!estado){ return; }
+      if(html){ estado.innerHTML = html; estado.hidden = false; } else { estado.hidden = true; }
+    };
+    var WA = '<a href="https://wa.me/573197248697" target="_blank" rel="noopener" style="text-decoration:underline;">escríbenos por WhatsApp</a>';
+    var MSG = {
+      used: 'Este pago ya se usó para abrir la agenda. Si necesitas ayuda, ' + WA + '.',
+      expired: 'Este pago es muy antiguo para abrir la agenda automáticamente. ' + WA + ' y te ayudamos.',
+      not_approved: 'No vemos un pago aprobado con este enlace. Si ya pagaste, ' + WA + '.',
+      bad_amount: 'El pago no corresponde a la reserva. ' + WA + ' y lo revisamos.',
+      wrong_link: 'El pago no corresponde a la reserva. ' + WA + ' y lo revisamos.',
+      dflt: 'No pudimos verificar tu pago automáticamente. Si ya pagaste, ' + WA + ' y te enviamos el enlace de la agenda.'
+    };
+
+    var pe = (res.getAttribute('data-pagos-endpoint') || '').trim();
+    var peOk = /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(pe);
+
+    // JSONP: Apps Script no manda cabeceras CORS, así que la respuesta se lee como script con callback.
+    var jsonp = function(params, done){
+      var cbName = '__clancyPago' + Date.now() + Math.floor(Math.random() * 1000000);
+      var s = document.createElement('script');
+      var finished = false;
+      var timer;
+      var finish = function(r){
+        if(finished){ return; }
+        finished = true;
+        clearTimeout(timer);
+        try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+        if(s.parentNode){ s.parentNode.removeChild(s); }
+        done(r);
+      };
+      timer = setTimeout(function(){ finish({ ok: false, reason: 'error' }); }, 15000);
+      window[cbName] = function(r){ finish(r || { ok: false, reason: 'error' }); };
+      s.onerror = function(){ finish({ ok: false, reason: 'error' }); };
+      s.src = pe + '?' + params + '&callback=' + cbName;
+      document.head.appendChild(s);
+    };
+
+    var guardar = function(id, token){
+      try { localStorage.setItem(PAGO_KEY, JSON.stringify({ id: id, token: token })); } catch(e){}
+    };
+    var olvidar = function(){
+      try { localStorage.removeItem(PAGO_KEY); } catch(e){}
+    };
+    var limpiarURL = function(){
+      try { history.replaceState(null, '', location.pathname); } catch(e){}
+    };
+
+    // Primer canje: reintenta unos segundos si Wompi aún muestra el pago como pendiente
+    var canjear = function(id, intento){
+      setEstado('Verificando tu pago…');
+      jsonp('action=redeem&id=' + encodeURIComponent(id), function(r){
+        if(r && r.ok && r.token){
+          guardar(id, r.token);
+          limpiarURL();
+          setEstado('Pago confirmado. Elige tu fecha aquí abajo.');
+          showFecha();
+          return;
+        }
+        var reason = r && r.reason;
+        if((reason === 'pending' || reason === 'error') && intento < 10){
+          setTimeout(function(){ canjear(id, intento + 1); }, 3000);
+          return;
+        }
+        setEstado(MSG[reason] || MSG.dflt);
+      });
+    };
+
+    // Volver a abrir la agenda con un canje ya hecho en este navegador
+    var restaurar = function(sv, conAviso){
+      jsonp('action=check&id=' + encodeURIComponent(sv.id) + '&token=' + encodeURIComponent(sv.token), function(r){
+        if(r && r.ok){
+          limpiarURL();
+          if(conAviso){ setEstado('Pago confirmado. Elige tu fecha aquí abajo.'); }
+          showFecha(!conAviso);
+        } else if(r && r.reason === 'invalid'){
+          olvidar();
+          if(conAviso){ setEstado(MSG.used); }
+        }
+        // si fue un error de conexión no se borra nada: se podrá reintentar al recargar
+      });
+    };
+
+    // MODO PRUEBA TEMPORAL (para probar la agenda en el sitio publicado sin Wompi):
+    // abre la agenda con  https://TU-DOMINIO/?probar=CLAVE   (cambia la CLAVE de abajo por una tuya).
+    // OJO: la clave queda visible en el código de la página, así que esto es solo para pruebas.
+    // BORRA ESTE BLOQUE antes de lanzar / cuando Wompi esté activo.
+    var PRUEBA_CLAVE = 'clancy-test-4821';
+    var pm = location.search.match(/[?&]probar=([A-Za-z0-9_-]{1,64})(?:&|$)/);
+    if(pm && pm[1] === PRUEBA_CLAVE){
+      setEstado('Modo prueba: agenda abierta sin pago.');
+      showFecha();
+    } else if(peOk){
+      if(pagoId){
+        if(pagoGuardado && pagoGuardado.id === pagoId){ restaurar(pagoGuardado, true); }
+        else { canjear(pagoId, 0); }
+      } else if(pagoGuardado){
+        restaurar(pagoGuardado, false);
+      }
+    } else if(pagoId){
+      setEstado('Recibimos tu pago, pero la verificación automática aún no está activa. ' + WA + ' y te enviamos el enlace de la agenda.');
+    }
   }
 
   // Cupos Pilot Sessions: se actualizan cambiando data-cupos-taken en <section id="pilot">
@@ -1645,7 +1765,7 @@
       var resv = document.getElementById('reservar');
       var pp = document.getElementById('pasoPago');
       if(pp){ pp.hidden = true; }
-      if(resv && location.hash !== '#fecha'){ resv.hidden = true; }
+      if(resv && !(pagoId || pagoGuardado)){ resv.hidden = true; }
     }
   }
 
