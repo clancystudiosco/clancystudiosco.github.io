@@ -110,17 +110,29 @@
      usando la propiedad independiente `translate` (no choca con la animación de `transform`). */
   .bg-layer{
     translate: var(--bg-px, 0px) var(--bg-py, 0px);
-    transition: translate .9s cubic-bezier(.22,.61,.36,1);
+    transition: translate 1.4s cubic-bezier(.22,.61,.36,1);
   }
   @media (min-width: 1100px){
-    .bg-layer{ animation: bgDriftPC 14s ease-in-out infinite alternate; }
+    .bg-layer{ animation: bgDriftPC 36s linear infinite; }
   }
   @keyframes bgDriftPC{
-    0%   { transform: translate3d(-6%, -5%, 0) scale(1.00) rotate(0deg); }
-    25%  { transform: translate3d(5%, 2%, 0)   scale(1.10) rotate(0.6deg); }
-    50%  { transform: translate3d(2%, 6%, 0)   scale(1.18) rotate(-0.4deg); }
-    75%  { transform: translate3d(-5%, 3%, 0)  scale(1.09) rotate(0.5deg); }
-    100% { transform: translate3d(4%, -5%, 0)  scale(1.03) rotate(0deg); }
+    0%{ transform: translate3d(0.00%, 2.33%, 0) scale(1.087); }
+    6.25%{ transform: translate3d(1.22%, 2.50%, 0) scale(1.082); }
+    12.5%{ transform: translate3d(2.26%, 2.29%, 0) scale(1.075); }
+    18.75%{ transform: translate3d(2.96%, 1.73%, 0) scale(1.067); }
+    25%{ transform: translate3d(3.20%, 0.91%, 0) scale(1.060); }
+    31.25%{ transform: translate3d(2.96%, -0.05%, 0) scale(1.054); }
+    37.5%{ transform: translate3d(2.26%, -1.01%, 0) scale(1.051); }
+    43.75%{ transform: translate3d(1.22%, -1.81%, 0) scale(1.050); }
+    50%{ transform: translate3d(0.00%, -2.33%, 0) scale(1.053); }
+    56.25%{ transform: translate3d(-1.22%, -2.50%, 0) scale(1.058); }
+    62.5%{ transform: translate3d(-2.26%, -2.29%, 0) scale(1.065); }
+    68.75%{ transform: translate3d(-2.96%, -1.73%, 0) scale(1.073); }
+    75%{ transform: translate3d(-3.20%, -0.91%, 0) scale(1.080); }
+    81.25%{ transform: translate3d(-2.96%, 0.05%, 0) scale(1.086); }
+    87.5%{ transform: translate3d(-2.26%, 1.01%, 0) scale(1.089); }
+    93.75%{ transform: translate3d(-1.22%, 1.81%, 0) scale(1.090); }
+    100%{ transform: translate3d(-0.00%, 2.33%, 0) scale(1.087); }
   }
 
   /* Oscurece de forma pareja para que el texto sea legible sobre cualquier zona de la textura,
@@ -161,17 +173,27 @@
        el fondo NO se congela: se queda con una deriva lenta y suave, sin zoom ni rotación.
        Los !important son necesarios para ganarle a la regla global de arriba que apaga todas las animaciones. */
     .bg-layer{
-      animation: bgDriftSoft 24s ease-in-out infinite alternate !important;
-      animation-duration: 24s !important;
+      animation: bgDriftSoft 44s linear infinite !important;
+      animation-duration: 44s !important;
       animation-iteration-count: infinite !important;
       translate: none; transition: none;
     }
     body::after{ animation: none; opacity: 0.3; }
   }
   @keyframes bgDriftSoft{
-    0%   { transform: translate3d(-5%, -4%, 0) scale(1.06); }
-    50%  { transform: translate3d(3%, 5%, 0)   scale(1.06); }
-    100% { transform: translate3d(5%, -4%, 0)  scale(1.06); }
+    0%{ transform: translate3d(0.00%, 2.05%, 0) scale(1.050); }
+    8.33%{ transform: translate3d(1.25%, 2.17%, 0) scale(1.050); }
+    16.67%{ transform: translate3d(2.17%, 1.72%, 0) scale(1.050); }
+    25%{ transform: translate3d(2.50%, 0.80%, 0) scale(1.050); }
+    33.33%{ transform: translate3d(2.17%, -0.33%, 0) scale(1.050); }
+    41.67%{ transform: translate3d(1.25%, -1.38%, 0) scale(1.050); }
+    50%{ transform: translate3d(0.00%, -2.05%, 0) scale(1.050); }
+    58.33%{ transform: translate3d(-1.25%, -2.17%, 0) scale(1.050); }
+    66.67%{ transform: translate3d(-2.17%, -1.72%, 0) scale(1.050); }
+    75%{ transform: translate3d(-2.50%, -0.80%, 0) scale(1.050); }
+    83.33%{ transform: translate3d(-2.17%, 0.33%, 0) scale(1.050); }
+    91.67%{ transform: translate3d(-1.25%, 1.38%, 0) scale(1.050); }
+    100%{ transform: translate3d(-0.00%, 2.05%, 0) scale(1.050); }
   }
 
   img{ max-width:100%; display:block; }
@@ -1512,8 +1534,8 @@
     function applyBg(){
       ticking = false;
       var sy = Math.min(window.scrollY * 0.04, 60);
-      bgLayer.style.setProperty('--bg-px', (mx * -40).toFixed(1) + 'px');
-      bgLayer.style.setProperty('--bg-py', (my * -30 - sy).toFixed(1) + 'px');
+      bgLayer.style.setProperty('--bg-px', (mx * -16).toFixed(1) + 'px');
+      bgLayer.style.setProperty('--bg-py', (my * -12 - sy).toFixed(1) + 'px');
     }
     function queueBg(){ if(!ticking){ ticking = true; requestAnimationFrame(applyBg); } }
     window.addEventListener('mousemove', function(e){
