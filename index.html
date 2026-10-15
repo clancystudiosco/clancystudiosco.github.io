@@ -1460,6 +1460,8 @@
       <div id="reservaOk" hidden style="margin-top:2rem;text-align:center;">
         <p class="form-note" style="color:var(--yellow);">Tu reserva quedó registrada. Revisa tu correo para ver los detalles.</p>
         <button type="button" id="terminarBtn" class="btn btn-solid" style="margin-top:1rem;">Terminar</button>
+        <!-- Audio al pulsar Terminar: sube el archivo a la misma carpeta que index.html con este nombre -->
+        <audio id="clancyTag" src="a-little-clancy.mp3" preload="auto"></audio>
       </div>
     </div>
   </div>
@@ -1679,6 +1681,29 @@
     // Terminar: borra el permiso guardado en este navegador, cierra la agenda y vuelve al inicio.
     if(terminarBtn){
       terminarBtn.addEventListener('click', function(){
+        if(terminarBtn.disabled){ return; }
+        terminarBtn.disabled = true;
+        var tag = document.getElementById('clancyTag');
+        var recargado = false;
+        var recargar = function(){
+          if(recargado){ return; }
+          recargado = true;
+          location.replace(location.pathname + '#hero');
+          location.reload();
+        };
+        // Suena "A little Clancy" (el clic del usuario permite reproducir el audio)
+        var sonando = false;
+        if(tag){
+          try {
+            tag.currentTime = 0;
+            var pr = tag.play();
+            sonando = true;
+            if(pr && typeof pr.catch === 'function'){ pr.catch(function(){ recargar(); }); }
+            tag.addEventListener('ended', recargar);
+            tag.addEventListener('error', recargar);
+          } catch(e){ sonando = false; }
+        }
+        // Borra el permiso guardado, cierra la agenda y vuelve al inicio
         try { localStorage.removeItem('clancy_reserva'); } catch(e){}
         try { history.replaceState(null, '', location.pathname); } catch(e){}
         if(cf){ cf.innerHTML = ''; }
@@ -1688,8 +1713,8 @@
         if(pe2){ pe2.hidden = true; }
         var h = document.getElementById('hero');
         if(h){ h.scrollIntoView(); } else { window.scrollTo(0, 0); }
-        // recarga limpia para que no quede rastro de la agenda
-        setTimeout(function(){ location.replace(location.pathname + '#hero'); location.reload(); }, 300);
+        // La recarga espera a que termine el audio (máx. 6 s); si no hay audio, recarga enseguida
+        setTimeout(recargar, sonando ? 6000 : 300);
       });
     }
     var showFecha = function(noScroll){
