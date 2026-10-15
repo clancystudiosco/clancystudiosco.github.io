@@ -224,6 +224,8 @@
     text-shadow: 0 1px 6px rgba(0,0,0,0.6);
   }
 
+  /* Nunca mostrar capas flotantes de Cal.com (modal / botón flotante): solo usamos el calendario en línea */
+  cal-modal-box, cal-floating-button{ display:none !important; }
   /* Pista junto al calendario de Cal.com */
   .cal-layout{ display:flex; flex-direction:column; gap:1rem; margin-top:2rem; }
   .cal-layout #calFrame{ margin-top:0 !important; min-width:0; flex:1; }
@@ -1703,16 +1705,29 @@
             tag.addEventListener('error', recargar);
           } catch(e){ sonando = false; }
         }
-        // Borra el permiso guardado, cierra la agenda y vuelve al inicio
+        // 1) Cortar la comunicación con Cal.com para que el embed no vuelva a abrir nada
+        var bloquearCal = function(ev){
+          if(/(^|\.)cal\.com$/.test((ev.origin || '').replace(/^https?:\/\//, ''))){ ev.stopImmediatePropagation(); }
+        };
+        window.addEventListener('message', bloquearCal, true);
+        // 2) Borrar el permiso guardado y limpiar la dirección
         try { localStorage.removeItem('clancy_reserva'); } catch(e){}
         try { history.replaceState(null, '', location.pathname); } catch(e){}
+        // 3) Quitar del todo cualquier elemento que haya creado Cal.com (dentro o fuera de la sección)
+        var restos = document.querySelectorAll('cal-inline, cal-modal-box, cal-floating-button, iframe[src*="cal.com"]');
+        for(var r = 0; r < restos.length; r++){ if(restos[r].parentNode){ restos[r].parentNode.removeChild(restos[r]); } }
         if(cf){ cf.innerHTML = ''; }
         if(okBox){ okBox.hidden = true; }
         if(fcard){ fcard.hidden = true; }
         var pe2 = document.getElementById('pagoEstado');
         if(pe2){ pe2.hidden = true; }
+        // 4) Subir al inicio de golpe (sin desplazamiento animado)
         var h = document.getElementById('hero');
+        var rootEl = document.documentElement;
+        var sb = rootEl.style.scrollBehavior;
+        rootEl.style.scrollBehavior = 'auto';
         if(h){ h.scrollIntoView(); } else { window.scrollTo(0, 0); }
+        rootEl.style.scrollBehavior = sb;
         // La recarga espera a que termine el audio (máx. 6 s); si no hay audio, recarga enseguida
         setTimeout(recargar, sonando ? 6000 : 300);
       });
