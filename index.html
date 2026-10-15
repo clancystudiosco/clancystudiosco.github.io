@@ -1432,6 +1432,10 @@
       <span class="kicker">Paso 2 — Elige tu fecha</span>
       <p class="lede" style="margin-top:1.2rem;">Elige tu día de noviembre. Las fechas ocupadas ya no aparecen.</p>
       <div id="calFrame" style="margin-top:2rem;"></div>
+      <div id="reservaOk" hidden style="margin-top:2rem;text-align:center;">
+        <p class="form-note" style="color:var(--yellow);">Tu reserva quedó registrada. Revisa tu correo para ver los detalles.</p>
+        <button type="button" id="terminarBtn" class="btn btn-solid" style="margin-top:1rem;">Terminar</button>
+      </div>
     </div>
   </div>
 </section>
@@ -1621,15 +1625,53 @@
     var cm = calRaw.match(/^(?:https:\/\/(?:app\.)?cal\.com\/)?([A-Za-z0-9._-]+\/[A-Za-z0-9._\/-]+)$/);
     var fcard = document.getElementById('fecha');
     var cf = document.getElementById('calFrame');
+    var okBox = document.getElementById('reservaOk');
+    var terminarBtn = document.getElementById('terminarBtn');
+    var mostrarTerminar = function(){
+      if(okBox){ okBox.hidden = false; }
+    };
+    // Cal.com embed oficial: avisa cuando la reserva se completa (el iframe simple no puede avisar).
+    var cargarCal = function(link){
+      var fallbackDone = false;
+      var fallback = function(){
+        if(fallbackDone || cf.children.length){ return; } // si el embed ya cargó, no hace falta el respaldo
+        fallbackDone = true;
+        var url = 'https://cal.com/' + link + '?theme=dark';
+        cf.innerHTML = '<iframe title="Elegir fecha — Clancy Studios" src="' + url + '" width="100%" height="700" style="border:0;background:transparent;"></iframe>';
+        mostrarTerminar(); // sin el embed no podemos detectar la reserva: el botón queda disponible
+      };
+      try {
+        (function (C, A, L) { var p = function (a, ar) { a.q.push(ar); }; var d = C.document; C.Cal = C.Cal || function () { var cal = C.Cal; var ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; var sc = d.head.appendChild(d.createElement('script')); sc.src = A; sc.onerror = fallback; cal.loaded = true; } if (ar[0] === L) { var api = function () { p(api, arguments); }; var namespace = ar[1]; api.q = api.q || []; if (typeof namespace === 'string') { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ['initNamespace', namespace]); } else { p(cal, ar); } return; } p(cal, ar); }; })(window, 'https://app.cal.com/embed/embed.js', 'init');
+        Cal('init', 'clancy', { origin: 'https://app.cal.com' });
+        Cal.ns.clancy('inline', { elementOrSelector: '#calFrame', calLink: link, layout: 'month_view', config: { theme: 'dark' } });
+        Cal.ns.clancy('ui', { theme: 'dark', hideEventTypeDetails: false, layout: 'month_view' });
+        Cal.ns.clancy('on', { action: 'bookingSuccessful', callback: function(){ mostrarTerminar(); } });
+        setTimeout(fallback, 8000);
+      } catch(e){ fallback(); }
+    };
+    // Terminar: borra el permiso guardado en este navegador, cierra la agenda y vuelve al inicio.
+    if(terminarBtn){
+      terminarBtn.addEventListener('click', function(){
+        try { localStorage.removeItem('clancy_reserva'); } catch(e){}
+        try { history.replaceState(null, '', location.pathname); } catch(e){}
+        if(cf){ cf.innerHTML = ''; }
+        if(okBox){ okBox.hidden = true; }
+        if(fcard){ fcard.hidden = true; }
+        var pe2 = document.getElementById('pagoEstado');
+        if(pe2){ pe2.hidden = true; }
+        var h = document.getElementById('hero');
+        if(h){ h.scrollIntoView(); } else { window.scrollTo(0, 0); }
+        // recarga limpia para que no quede rastro de la agenda
+        setTimeout(function(){ location.replace(location.pathname + '#hero'); location.reload(); }, 300);
+      });
+    }
     var showFecha = function(noScroll){
       if(!fcard || !cf){ return; }
       fcard.hidden = false;
       fcard.classList.add('in');
       if(!cf.firstChild){
         if(cm){
-          var url = 'https://cal.com/' + cm[1] + '?theme=dark';
-          cf.innerHTML = '<iframe title="Elegir fecha — Clancy Studios" src="' + url + '" width="100%" height="700" loading="lazy" style="border:0;background:transparent;"></iframe>' +
-                         '<p class="form-note"><a href="' + url + '" target="_blank" rel="noopener">Abrir la agenda en una pestaña nueva</a></p>';
+          cargarCal(cm[1]);
         } else {
           cf.innerHTML = '<div class="video-placeholder" style="padding:3rem 1rem;">Agenda de fechas — próximamente</div>';
         }
