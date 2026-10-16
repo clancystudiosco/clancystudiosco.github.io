@@ -625,6 +625,51 @@
   .corner.bl{ bottom:14px; left:14px; border-bottom-width:2px; border-left-width:2px; }
   .corner.br{ bottom:14px; right:14px; border-bottom-width:2px; border-right-width:2px; }
 
+  /* ============ NUESTRO ESPACIO (galería de fotos) ============ */
+  .space-gallery{
+    margin-top: 3rem;
+    display: flex; gap: 1.1rem;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.8rem;
+    scrollbar-width: none;
+  }
+  .space-gallery::-webkit-scrollbar{ display:none; }
+  .space-card{
+    position: relative; flex: 0 0 78%; scroll-snap-align: center;
+    aspect-ratio: 3/4; overflow: hidden;
+    border: 1px solid var(--line-strong); background: var(--bg-raise);
+    display:flex; align-items:flex-end;
+    text-decoration:none; color: inherit;
+    transition: border-color .3s var(--ease), opacity .8s var(--ease), transform .8s var(--ease);
+  }
+  .space-card .photo{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit: cover; transition: transform .7s var(--ease);
+  }
+  .space-card::before{
+    content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+    background: linear-gradient(to top, rgba(5,5,5,0.88) 0%, rgba(5,5,5,0.15) 38%, transparent 60%);
+  }
+  .space-card .corner{ z-index:2; }
+  .space-card .info{ position:relative; z-index:2; padding: 1.4rem 1.3rem; width:100%; }
+  .space-card .info h4{ font-family: var(--f-label); font-weight:600; font-size:1.05rem; margin:0 0 0.25rem; letter-spacing:0.01em; }
+  .space-card .info span{ font-family: var(--f-label); font-size:0.78rem; letter-spacing:0.06em; color: var(--yellow); text-transform: uppercase; text-shadow: 0 1px 6px rgba(0,0,0,0.6); }
+  .space-card .go{
+    position:absolute; top:0.9rem; right:0.9rem; z-index:3; width:36px; height:36px; border-radius:50%;
+    background: rgba(5,5,5,0.7); border:1px solid var(--line-strong); color: var(--ink);
+    display:flex; align-items:center; justify-content:center; transition: background .3s, color .3s;
+  }
+  .space-card:hover, .space-card:focus-visible{ border-color: var(--red); outline:none; }
+  .space-card:hover .photo, .space-card:focus-visible .photo{ transform: scale(1.05); }
+  .space-card:hover .go, .space-card:focus-visible .go{ background: var(--red); color:#050505; }
+  @media (min-width: 760px){
+    .space-gallery{ overflow: visible; display:grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; align-items:start; padding-bottom:0; }
+    .space-card{ flex: none; }
+    .space-card:nth-child(2){ margin-top: 2.6rem; }
+  }
+  @media (prefers-reduced-motion: reduce){ .space-card .photo{ transition:none; } }
+
   /* ============ EXPERIENCIA ============ */
   .experience-grid{
     display:grid; grid-template-columns: 1fr; gap: 2.5rem; margin-top: 3.5rem;
@@ -938,7 +983,7 @@
     </a>
     <nav class="nav-links" aria-label="Navegación principal">
       <a href="#sonido">Sonido</a>
-      <a href="#tour3d">Tour 3D</a>
+      <a href="#espacio">Nuestro espacio</a>
       <a href="#experiencia">Experiencia</a>
       <a href="#servicios">Servicios</a>
       <a href="#equipo">Equipamiento</a>
@@ -956,7 +1001,7 @@
 
 <div class="mobile-menu" id="mobileMenu">
   <a href="#sonido">Sonido</a>
-  <a href="#tour3d">Tour 3D</a>
+  <a href="#espacio">Nuestro espacio</a>
   <a href="#experiencia">Experiencia</a>
   <a href="#servicios">Servicios</a>
   <a href="#equipo">Equipamiento</a>
@@ -1016,8 +1061,44 @@
   </div>
 </section>
 
-<!-- ============ 4. RECORRIDO 3D ============ -->
-<section class="section" id="tour3d">
+<!-- ============ 4. NUESTRO ESPACIO (fotos del estudio) ============ -->
+<section class="section" id="espacio">
+  <div class="wrap">
+    <span class="kicker">El estudio</span>
+    <h2 class="h-section" style="margin-top:1rem;">Nuestro <span class="accent">espacio.</span></h2>
+    <p class="lede" style="margin-top:1.2rem;">Así es Clancy por dentro: el lugar real donde vas a grabar. Toca cualquier foto para ver la lista técnica de equipos.</p>
+
+    <!-- Cada foto abre en una pestaña nueva la lista técnica de equipos (PDF, se ve en el navegador).
+         REEMPLAZAR: si cambia el nombre del PDF, actualizar los 3 href de abajo. -->
+    <div class="space-gallery">
+      <a class="space-card reveal" href="Lista-técnica-de-equipos-ClancyStudios.pdf" target="_blank" rel="noopener" aria-label="Zona de control y rack del estudio — ver lista técnica de equipos">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <img src="Estudio-1.webp" alt="Estudio Clancy: escritorio con monitores, rack de procesamiento, micrófonos y alfombra de grabación" class="photo" width="1050" height="1400" loading="lazy" decoding="async">
+        <span class="go" aria-hidden="true">↗</span>
+        <div class="info"><h4>Control y sala de grabación</h4><span>Ver lista técnica de equipos</span></div>
+      </a>
+      <a class="space-card reveal" href="Lista-técnica-de-equipos-ClancyStudios.pdf" target="_blank" rel="noopener" aria-label="Puesto de producción con teclados y sintetizadores — ver lista técnica de equipos">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <img src="Estudio-2.webp" alt="Estudio Clancy: puesto de producción con teclados, sintetizadores, monitores de referencia y paneles acústicos" class="photo" width="1050" height="1400" loading="lazy" decoding="async">
+        <span class="go" aria-hidden="true">↗</span>
+        <div class="info"><h4>Producción y teclados</h4><span>Ver lista técnica de equipos</span></div>
+      </a>
+      <a class="space-card reveal" href="Lista-técnica-de-equipos-ClancyStudios.pdf" target="_blank" rel="noopener" aria-label="Zona de captura con micrófonos, guitarras y paneles — ver lista técnica de equipos">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <img src="Estudio-3.webp" alt="Estudio Clancy: zona de captura con micrófonos en pedestal, guitarras colgadas y difusores acústicos" class="photo" width="1050" height="1400" loading="lazy" decoding="async">
+        <span class="go" aria-hidden="true">↗</span>
+        <div class="info"><h4>Zona de captura</h4><span>Ver lista técnica de equipos</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RECORRIDO 3D (OCULTO TEMPORALMENTE) ============
+     Se esconde con el atributo "hidden" hasta tener el modelo 3D.
+     PARA ACTIVARLO: 1) quita la palabra  hidden  de la etiqueta <section> de abajo,
+     2) descomenta el iframe de Sketchfab y pon su src real,
+     3) en el menú (nav y menú móvil) vuelve a agregar el enlace  <a href="#tour3d">Tour 3D</a>. -->
+<section class="section" id="tour3d" hidden>
   <div class="wrap">
     <span class="kicker">Recorrido virtual</span>
     <h2 class="h-section" style="margin-top:1rem;">Explora el estudio en 3D.</h2>
