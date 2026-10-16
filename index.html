@@ -226,6 +226,18 @@
 
   /* Nunca mostrar capas flotantes de Cal.com (modal / botón flotante): solo usamos el calendario en línea */
   cal-modal-box, cal-floating-button{ display:none !important; }
+  /* Botón Terminar: más grande y con dos flechas que apuntan hacia él */
+  .terminar-row{ display:flex; align-items:center; justify-content:center; gap:clamp(0.8rem,3vw,1.6rem); margin-top:1.4rem; }
+  .btn-terminar{ font-size:1.25rem; padding:1.15rem 3rem; min-width:12rem; }
+  .terminar-arrow{ color: var(--yellow); display:inline-flex; flex:none; }
+  .terminar-arrow svg{ width:2.4rem; height:2.4rem; }
+  .terminar-arrow-l{ animation: terminarL 1s ease-in-out infinite; }
+  .terminar-arrow-r{ animation: terminarR 1s ease-in-out infinite; }
+  .terminar-arrow-r svg{ transform: scaleX(-1); }
+  @keyframes terminarL{ 0%,100%{ translate:0 0; } 50%{ translate:10px 0; } }
+  @keyframes terminarR{ 0%,100%{ translate:0 0; } 50%{ translate:-10px 0; } }
+  @media (max-width: 480px){ .btn-terminar{ padding:1.05rem 2rem; min-width:9.5rem; } .terminar-arrow svg{ width:1.9rem; height:1.9rem; } }
+  @media (prefers-reduced-motion: reduce){ .terminar-arrow-l, .terminar-arrow-r{ animation:none; } }
   /* Pista junto al calendario de Cal.com */
   .cal-layout{ display:flex; flex-direction:column; gap:1rem; margin-top:2rem; }
   .cal-layout #calFrame{ margin-top:0 !important; min-width:0; flex:1; }
@@ -1455,7 +1467,11 @@
       </div>
       <div id="reservaOk" hidden style="margin-top:2rem;text-align:center;">
         <p class="form-note" style="color:var(--yellow);">Tu reserva quedó registrada. Revisa tu correo para ver los detalles.</p>
-        <button type="button" id="terminarBtn" class="btn btn-solid" style="margin-top:1rem;">Terminar</button>
+        <div class="terminar-row">
+          <span class="terminar-arrow terminar-arrow-l"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16h22M18 7l9 9-9 9"/></svg></span>
+          <button type="button" id="terminarBtn" class="btn btn-solid btn-terminar">Terminar</button>
+          <span class="terminar-arrow terminar-arrow-r"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16h22M18 7l9 9-9 9"/></svg></span>
+        </div>
         <!-- Audio al pulsar Terminar: sube el archivo a la misma carpeta que index.html con este nombre -->
         <audio id="clancyTag" src="a-little-clancy.mp3" preload="auto"></audio>
       </div>
