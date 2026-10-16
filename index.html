@@ -1433,10 +1433,11 @@
         <div class="pay-item"><div class="amount">$380.000</div><div class="label" style="color:var(--yellow);">Saldo en el estudio, el día de la sesión</div></div>
         <div class="pay-item"><div class="amount">$420.000</div><div class="label">Total</div></div>
       </div>
-      <a id="wompiBtn" href="#" class="btn btn-solid" target="_blank" rel="noopener" aria-disabled="true" style="margin-top:2rem;">Pagar reserva con Wompi</a>
-      <p class="form-note">En línea solo pagas la reserva de $40.000, en el sitio seguro de Wompi. Se descuenta del valor total: no es un cobro adicional, sino la forma de confirmar tu fecha. Los $380.000 restantes los pagas en persona, en el estudio, el día de tu sesión, en efectivo, por transferencia o con llave. Usa el mismo correo de tu inscripción para que podamos identificar tu reserva.</p>
+      <!-- TEMPORAL: pago por WhatsApp mientras se activa Wompi. Cuando tengas Wompi, llena data-wompi-url arriba y cambia este texto/enlace. -->
+      <a id="wompiBtn" href="https://wa.me/573197248697?text=Hola%20Clancy%2C%20quiero%20reservar%20mi%20cupo%20en%20Pilot%20Sessions%20y%20pagar%20la%20reserva%20de%20%2440.000" class="btn btn-solid" target="_blank" rel="noopener" style="margin-top:2rem;">Pagar reserva por WhatsApp</a>
+      <p class="form-note">La reserva de $40.000 se paga por WhatsApp: te escribimos los datos de pago y, cuando confirmemos tu transferencia, te enviamos el enlace para elegir tu fecha. Se descuenta del valor total: no es un cobro adicional, sino la forma de confirmar tu fecha. Los $380.000 restantes los pagas en persona, en el estudio, el día de tu sesión, en efectivo, por transferencia o con llave. Envíanos el comprobante junto con el correo de tu inscripción para que podamos identificar tu reserva.</p>
       <p class="form-note">Ten en cuenta que <strong>los $40.000 de la reserva no son reembolsables</strong>. Si necesitas reprogramar, puedes hacerlo con al menos <strong>48 horas de anticipación</strong> al inicio de tu sesión; pasado ese plazo, la reserva se pierde. La entrega final se realiza una vez completado el pago correspondiente.</p>
-      <p class="form-note" style="color:var(--yellow);">Al terminar el pago, Wompi te trae de vuelta aquí para elegir tu fecha. Si no te redirige, <a href="https://wa.me/573197248697" target="_blank" rel="noopener" style="text-decoration:underline;">escríbenos por WhatsApp</a> y te enviamos el enlace.</p>
+      <p class="form-note" style="color:var(--yellow);">Cuando confirmemos tu pago, te enviamos por WhatsApp el enlace para elegir tu fecha. ¿Dudas? <a href="https://wa.me/573197248697" target="_blank" rel="noopener" style="text-decoration:underline;">Escríbenos por WhatsApp</a>.</p>
     </div>
 
     <p class="form-note" id="pagoEstado" role="status" aria-live="polite" style="color:var(--yellow);margin-top:1.5rem;" hidden></p>
@@ -1823,14 +1824,14 @@
       });
     };
 
-    // MODO PRUEBA TEMPORAL (para probar la agenda en el sitio publicado sin Wompi):
-    // abre la agenda con  https://TU-DOMINIO/?probar=CLAVE   (cambia la CLAVE de abajo por una tuya).
-    // OJO: la clave queda visible en el código de la página, así que esto es solo para pruebas.
-    // BORRA ESTE BLOQUE antes de lanzar / cuando Wompi esté activo.
+    // ENLACE DE AGENDA TEMPORAL (mientras no hay Wompi): tras confirmar el pago por WhatsApp, envía al cliente
+    //   https://TU-DOMINIO/?agenda=CLAVE   (CLAVE = la de abajo; cámbiala por una tuya).
+    // OJO: la clave queda visible en el código de la página, así que no es seguridad real. Mantén en Cal.com
+    // "Requires confirmation" para aprobar solo las reservas pagadas. BORRA este bloque cuando Wompi esté activo.
     var PRUEBA_CLAVE = 'clancy-test-4821';
-    var pm = location.search.match(/[?&]probar=([A-Za-z0-9_-]{1,64})(?:&|$)/);
+    var pm = location.search.match(/[?&](?:agenda|probar)=([A-Za-z0-9_-]{1,64})(?:&|$)/);
     if(pm && pm[1] === PRUEBA_CLAVE){
-      setEstado('Modo prueba: agenda abierta sin pago.');
+      setEstado('Pago confirmado. Elige tu fecha.');
       showFecha();
     } else if(peOk){
       if(pagoId){
