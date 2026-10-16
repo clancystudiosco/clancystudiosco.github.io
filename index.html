@@ -653,7 +653,7 @@
   }
   .space-card .corner{ z-index:2; }
   .space-card .info{ position:relative; z-index:2; padding: 1.4rem 1.3rem; width:100%; }
-  .space-card .info h4{ font-family: var(--f-label); font-weight:600; font-size:1.05rem; margin:0 0 0.25rem; letter-spacing:0.01em; }
+  .space-card .info .num{ display:block; font-family: var(--f-display); font-weight:400; font-size:2rem; line-height:1; color: var(--ink); margin-bottom:1rem; text-shadow: 0 1px 8px rgba(0,0,0,0.6); }
   .space-card .info span{ font-family: var(--f-label); font-size:0.78rem; letter-spacing:0.06em; color: var(--yellow); text-transform: uppercase; text-shadow: 0 1px 6px rgba(0,0,0,0.6); }
   .space-card .go{
     position:absolute; top:0.9rem; right:0.9rem; z-index:3; width:36px; height:36px; border-radius:50%;
@@ -1066,28 +1066,29 @@
   <div class="wrap">
     <span class="kicker">El estudio</span>
     <h2 class="h-section" style="margin-top:1rem;">Nuestro <span class="accent">espacio.</span></h2>
-    <p class="lede" style="margin-top:1.2rem;">Así es Clancy por dentro: el lugar real donde vas a grabar. Toca cualquier foto para ver la lista técnica de equipos.</p>
+    <p class="pilot-sub">Una sala, todo a la mano.</p>
+    <p class="lede" style="margin-top:1rem;">Control, instrumentos y zona de captura en la misma sala, para que nada interrumpa la sesión.</p>
 
     <!-- Cada foto abre en una pestaña nueva la lista técnica de equipos (PDF, se ve en el navegador).
          REEMPLAZAR: si cambia el nombre del PDF, actualizar los 3 href de abajo. -->
     <div class="space-gallery">
-      <a class="space-card reveal" href="Lista-técnica-de-equipos-ClancyStudios.pdf" target="_blank" rel="noopener" aria-label="Zona de control y rack del estudio — ver lista técnica de equipos">
+      <a class="space-card reveal" href="Lista-técnica-de-equipos-ClancyStudios.pdf" target="_blank" rel="noopener" aria-label="Foto 1 del estudio — ver lista técnica de equipos">
         <span class="corner tl"></span><span class="corner br"></span>
         <img src="Estudio-1.webp" alt="Estudio Clancy: escritorio con monitores, rack de procesamiento, micrófonos y alfombra de grabación" class="photo" width="1050" height="1400" loading="lazy" decoding="async">
         <span class="go" aria-hidden="true">↗</span>
-        <div class="info"><h4>Control y sala de grabación</h4><span>Ver lista técnica de equipos</span></div>
+        <div class="info"><b class="num">01</b><span>Ver lista técnica de equipos</span></div>
       </a>
-      <a class="space-card reveal" href="Lista-técnica-de-equipos-ClancyStudios.pdf" target="_blank" rel="noopener" aria-label="Puesto de producción con teclados y sintetizadores — ver lista técnica de equipos">
+      <a class="space-card reveal" href="Lista-técnica-de-equipos-ClancyStudios.pdf" target="_blank" rel="noopener" aria-label="Foto 2 del estudio — ver lista técnica de equipos">
         <span class="corner tl"></span><span class="corner br"></span>
         <img src="Estudio-2.webp" alt="Estudio Clancy: puesto de producción con teclados, sintetizadores, monitores de referencia y paneles acústicos" class="photo" width="1050" height="1400" loading="lazy" decoding="async">
         <span class="go" aria-hidden="true">↗</span>
-        <div class="info"><h4>Producción y teclados</h4><span>Ver lista técnica de equipos</span></div>
+        <div class="info"><b class="num">02</b><span>Ver lista técnica de equipos</span></div>
       </a>
-      <a class="space-card reveal" href="Lista-técnica-de-equipos-ClancyStudios.pdf" target="_blank" rel="noopener" aria-label="Zona de captura con micrófonos, guitarras y paneles — ver lista técnica de equipos">
+      <a class="space-card reveal" href="Lista-técnica-de-equipos-ClancyStudios.pdf" target="_blank" rel="noopener" aria-label="Foto 3 del estudio — ver lista técnica de equipos">
         <span class="corner tl"></span><span class="corner br"></span>
         <img src="Estudio-3.webp" alt="Estudio Clancy: zona de captura con micrófonos en pedestal, guitarras colgadas y difusores acústicos" class="photo" width="1050" height="1400" loading="lazy" decoding="async">
         <span class="go" aria-hidden="true">↗</span>
-        <div class="info"><h4>Zona de captura</h4><span>Ver lista técnica de equipos</span></div>
+        <div class="info"><b class="num">03</b><span>Ver lista técnica de equipos</span></div>
       </a>
     </div>
   </div>
