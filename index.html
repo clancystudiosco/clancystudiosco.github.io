@@ -1340,7 +1340,11 @@ src="https://www.facebook.com/tr?id=1373350051292764&ev=PageView&noscript=1"
 <!-- ============ 9. CLANCY PILOT SESSIONS ============ -->
 <!-- Esta sección está pensada para ser temporal. Ver comentario al final del bloque
      sobre cómo transformarla en "Clancy Sessions" / "Reserva una sesión" después del piloto. -->
-<section class="section pilot-section" id="pilot" data-cupos-total="10" data-cupos-taken="2">
+<!-- CONTADORES (se editan solo aquí):
+     data-desc-total / data-desc-taken : reservas con 10% de descuento (siempre visible).
+     data-cupos-total / data-cupos-taken : cupos generales ya reservados de verdad.
+     data-cupos-min : el contador general aparece cuando taken >= min (2 o 3). -->
+<section class="section pilot-section" id="pilot" data-desc-total="3" data-desc-taken="0" data-cupos-total="10" data-cupos-taken="0" data-cupos-min="3">
   <div class="wrap">
     <span class="pilot-badge">Noviembre · 10 cupos</span>
     <img src="clancypiloto.webp" alt="Clancy Pilot Sessions" class="pilot-title-img" width="1100" height="550" loading="lazy" decoding="async">
@@ -1348,7 +1352,14 @@ src="https://www.facebook.com/tr?id=1373350051292764&ev=PageView&noscript=1"
     <p class="lede" style="margin-top:1.6rem; max-width:56ch;">Abrimos 10 cupos para grabar tu canción en noviembre. Todos incluyen la canción grabada, mezclada y masterizada. Además, un solo proyecto ganará un premio: un videoclip y otra canción grabada sin costo, ambos en el estudio nuevo de Clancy, en 2027. El ganador se elige por el guion de su videoclip, que es opcional.</p>
 
     <!-- CUPOS: para actualizarlos cambia data-cupos-taken en <section id="pilot"> (cupos ya ocupados) -->
-    <div class="cupos" id="cupos" aria-live="polite">
+    <!-- CONTADOR DEL DESCUENTO (siempre visible) -->
+    <div class="cupos cupos-desc" id="cuposDesc" aria-live="polite">
+      <div class="cupos-text"><span class="cupos-num" id="descNum">3</span><span id="descLabel">Quedan 3 de 3 reservas con 10% de descuento</span></div>
+      <div class="cupos-pips" id="descPips" aria-hidden="true"></div>
+    </div>
+
+    <!-- CONTADOR GENERAL (oculto hasta que haya suficientes cupos reservados; ver data-cupos-min) -->
+    <div class="cupos" id="cupos" aria-live="polite" hidden>
       <div class="cupos-text"><span class="cupos-num" id="cuposNum">8</span><span id="cuposLabel">cupos disponibles de 10</span></div>
       <div class="cupos-pips" id="cuposPips" aria-hidden="true"></div>
     </div>
@@ -2005,6 +2016,28 @@ src="https://www.facebook.com/tr?id=1373350051292764&ev=PageView&noscript=1"
     var total = parseInt(pilot.getAttribute('data-cupos-total'), 10) || 10;
     var taken = Math.max(0, parseInt(pilot.getAttribute('data-cupos-taken'), 10) || 0);
     var left = Math.max(0, total - taken);
+    // Contador del descuento (siempre visible)
+    var dTotal = parseInt(pilot.getAttribute('data-desc-total'), 10) || 3;
+    var dTaken = Math.max(0, parseInt(pilot.getAttribute('data-desc-taken'), 10) || 0);
+    var dLeft = Math.max(0, dTotal - dTaken);
+    var dNum = document.getElementById('descNum');
+    var dLabel = document.getElementById('descLabel');
+    var dPips = document.getElementById('descPips');
+    if(dNum){ dNum.textContent = dLeft; }
+    if(dLabel){
+      dLabel.textContent = dLeft === 0
+        ? 'Las reservas con 10% de descuento ya se agotaron'
+        : (dLeft === 1 ? 'Queda ' : 'Quedan ') + dLeft + ' de ' + dTotal + ' reservas con 10% de descuento';
+    }
+    if(dPips){
+      var dh = '';
+      for(var j = 0; j < dTotal; j++){ dh += '<i class="' + (j < dLeft ? '' : 'taken') + '"></i>'; }
+      dPips.innerHTML = dh;
+    }
+    // Contador general: solo se muestra cuando hay al menos data-cupos-min cupos reservados
+    var minShow = parseInt(pilot.getAttribute('data-cupos-min'), 10) || 3;
+    var cuposBox = document.getElementById('cupos');
+    if(cuposBox){ cuposBox.hidden = !(taken >= minShow); }
     var num = document.getElementById('cuposNum');
     var label = document.getElementById('cuposLabel');
     var pips = document.getElementById('cuposPips');
