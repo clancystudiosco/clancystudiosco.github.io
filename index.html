@@ -968,6 +968,23 @@
   }
   .field.consent a{ text-decoration: underline; text-underline-offset: 3px; color: var(--yellow); }
 </style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1373350051292764');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1373350051292764&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 <div class="bg-layer" aria-hidden="true"></div>
@@ -1469,6 +1486,7 @@
               <p><strong>Datos que recogemos en este formulario:</strong> nombre del artista o proyecto, nombre del responsable, WhatsApp, correo, Instagram, género musical, canción, enlace del guion, referencias, objetivo de la sesión, participantes y sus funciones, y tus preferencias de snack y bebida. No pedimos datos sensibles. Si inscribes a otras personas, declaras que tienes su autorización.</p>
               <p><strong>Para qué los usamos:</strong> gestionar tu inscripción y tu sesión, contactarte por WhatsApp o correo, gestionar cobros y comprobantes, recibir y evaluar tu guion para el premio, atender tus solicitudes e informarte sobre próximas sesiones y novedades de Clancy (puedes pedir que no te escribamos más en cualquier momento). No vendemos tus datos ni los usamos para otras finalidades sin tu autorización, salvo que la ley lo exija.</p>
               <p><strong>Dónde se guardan y quién los trata:</strong> los datos de este formulario llegan a una hoja de cálculo y a un correo de Google a los que solo accede el equipo de Clancy. Para prestar el servicio también usamos Wompi (pagos), Cal.com (agenda) y WhatsApp. Algunos de estos proveedores pueden guardar información en servidores fuera de Colombia.</p>
+              <p><strong>Medición de publicidad (Píxel de Meta):</strong> este sitio usa el Píxel de Meta (Facebook e Instagram) para medir el resultado de nuestros anuncios y mostrarlos a personas con intereses similares. El Píxel puede recibir datos de navegación como tu dirección IP, tu navegador y las páginas que visitas. Cuando envías el formulario, solo informamos a Meta que se completó una inscripción, sin incluir los datos que escribiste. Meta puede tratar esta información en servidores fuera de Colombia. Puedes limitar la publicidad personalizada desde la configuración de anuncios de tu cuenta de Facebook o Instagram, o bloquear las cookies en tu navegador.</p>
               <p><strong>Cuánto tiempo:</strong> mientras dure tu relación con Clancy y el tiempo necesario para cumplir obligaciones legales, contables y tributarias. Los guiones no elegidos se dejan de conservar cuando termina la selección del premio.</p>
               <p><strong>Menores de edad:</strong> solo tratamos datos de menores de 18 años con autorización de su madre, padre o representante legal.</p>
               <p><strong>Tus derechos:</strong> conocer, actualizar y rectificar tus datos; pedir prueba de tu autorización; ser informado del uso que se les ha dado; acceder a ellos gratis; revocar la autorización y pedir la supresión cuando no exista un deber legal o contractual de conservarlos; y presentar quejas ante la Superintendencia de Industria y Comercio (SIC). Escríbenos al correo o WhatsApp de contacto: respondemos consultas en máximo 10 días hábiles y reclamos en máximo 15 días hábiles. Ley 1581 de 2012.</p>
@@ -1995,6 +2013,8 @@
       var data = new URLSearchParams(new FormData(form));
       fetch(endpoint, { method: 'POST', mode: 'no-cors', body: data })
         .then(function(){
+          // Meta Pixel: registra la inscripción como conversión (sin enviar datos personales)
+          if(typeof fbq === 'function'){ fbq('track', 'Lead'); }
           form.reset();
           msg.textContent = 'Recibimos tu inscripción y tu guion. Ahora reserva tu cupo para confirmarlo.';
           msg.hidden = false;
