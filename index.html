@@ -752,6 +752,13 @@
   .work-grid{ display:grid; grid-template-columns:1fr; gap: 2rem; margin-top:3rem; }
   @media (min-width: 700px){ .work-grid{ grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1050px){ .work-grid{ grid-template-columns: repeat(3, 1fr); } }
+  /* Si queda una tarjeta sola en la última fila, se centra para que el conjunto se vea balanceado */
+  @media (min-width: 700px) and (max-width: 1049px){
+    .work-grid .work-card:last-child:nth-child(odd){ grid-column: 1 / -1; justify-self: center; width: calc((100% - 2rem) / 2); }
+  }
+  @media (min-width: 1050px){
+    .work-grid .work-card:last-child:nth-child(3n+1){ grid-column: 2; }
+  }
   .work-card{
     position:relative; aspect-ratio: 4/5; background: var(--bg-raise);
     border: 1px solid var(--line);
@@ -1332,6 +1339,12 @@ src="https://www.facebook.com/tr?id=1373350051292764&ev=PageView&noscript=1"
         <div class="shade"></div>
         <span class="go" aria-hidden="true">↗</span>
         <div class="info"><h4>VALEX</h4><span>Artista / Productor — Urbano, Pop</span></div>
+      </a>
+      <a class="work-card reveal" href="https://www.instagram.com/oficialbrain/" target="_blank" rel="noopener" aria-label="Brain — abrir perfil">
+        <img src="Brain.webp" alt="Brain" class="photo" width="800" height="1066" loading="lazy" decoding="async">
+        <div class="shade"></div>
+        <span class="go" aria-hidden="true">↗</span>
+        <div class="info"><h4>Brain</h4><span>Artista — Urbano</span></div>
       </a>
     </div>
   </div>
