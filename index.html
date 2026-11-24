@@ -1357,19 +1357,19 @@ src="https://www.facebook.com/tr?id=1373350051292764&ev=PageView&noscript=1"
      data-desc-total / data-desc-taken : reservas con 10% de descuento (siempre visible).
      data-cupos-total / data-cupos-taken : cupos generales ya reservados de verdad.
      data-cupos-min : el contador general aparece cuando taken >= min (2 o 3). -->
-<section class="section pilot-section" id="pilot" data-desc-total="3" data-desc-taken="0" data-cupos-total="10" data-cupos-taken="0" data-cupos-min="3">
+<section class="section pilot-section" id="pilot" data-desc-total="3" data-desc-taken="0" data-cupos-total="10" data-cupos-taken="10" data-cupos-min="3">
   <div class="wrap">
-    <span class="pilot-badge">Noviembre · 10 cupos</span>
+    <span class="pilot-badge">Noviembre · Cupos agotados</span>
     <img src="clancypiloto.webp" alt="Clancy Pilot Sessions" class="pilot-title-img" width="1100" height="550" loading="lazy" decoding="async">
     <p class="pilot-sub">Los primeros 10 proyectos de Clancy.</p>
-    <p class="lede" style="margin-top:1.6rem; max-width:56ch;">Abrimos 10 cupos para grabar tu canción en noviembre. Todos incluyen la canción grabada, mezclada y masterizada. Además, un solo proyecto ganará un premio: un videoclip y otra canción grabada sin costo, ambos en el estudio nuevo de Clancy, en 2027. El ganador se elige por el guion de su videoclip, que es opcional.</p>
+    <p class="lede" style="margin-top:1.6rem; max-width:56ch;">Abrimos 10 cupos para grabar canciones en noviembre y ya están todos reservados. Todos incluyen la canción grabada, mezclada y masterizada. Además, un solo proyecto ganará un premio: un videoclip y otra canción grabada sin costo, ambos en el estudio nuevo de Clancy, en 2027. El ganador se elige por el guion de su videoclip, que es opcional.</p>
 
-    <!-- MENSAJE DE URGENCIA (reemplaza los contadores de cupos) -->
+    <!-- CUPOS AGOTADOS -->
     <div class="cupos">
-      <div class="cupos-text"><span class="cupos-num">10</span><span>cupos en total. Cuando se llenen, se acabó: no te quedes sin el tuyo.</span></div>
+      <div class="cupos-text"><span class="cupos-num">10/10</span><span>cupos reservados. ¡Gracias por confiar en Clancy!</span></div>
     </div>
     <div class="pilot-cta" data-reserve-cta><a href="#aplicar" class="btn btn-solid">Quiero mi cupo</a></div>
-    <p class="cupos-closed" id="cuposClosed" hidden>Los 10 cupos están completos. Síguenos en Instagram para enterarte de las próximas sesiones.</p>
+    <p class="cupos-closed" id="cuposClosed" hidden>Las Pilot Sessions están completas. Síguenos en <a href="https://instagram.com/clancystudiosco" target="_blank" rel="noopener" style="text-decoration:underline;">Instagram</a> para enterarte de las próximas sesiones, o <a href="https://wa.me/573197248697?text=Hola%20Clancy%2C%20quiero%20agendar%20una%20sesi%C3%B3n" target="_blank" rel="noopener" style="text-decoration:underline;">escríbenos por WhatsApp</a> para agendar una sesión normal.</p>
 
     <!-- OFERTA -->
     <div class="offer-card reveal">
@@ -2060,7 +2060,9 @@ src="https://www.facebook.com/tr?id=1373350051292764&ev=PageView&noscript=1"
       var resv = document.getElementById('reservar');
       var pp = document.getElementById('pasoPago');
       if(pp){ pp.hidden = true; }
-      if(resv && !(pagoId || pagoGuardado)){ resv.hidden = true; }
+      // Quien ya pagó y recibe el enlace ?agenda=CLAVE sigue pudiendo elegir su fecha
+      var conClave = (typeof pm !== 'undefined' && pm && pm[1] === PRUEBA_CLAVE);
+      if(resv && !(pagoId || pagoGuardado || conClave)){ resv.hidden = true; }
     }
   }
 
